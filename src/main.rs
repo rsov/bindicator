@@ -1,5 +1,5 @@
 mod components;
-use components::bin::Bin;
+use components::bin::BinComponent;
 use components::clock::ClockComponent;
 
 use yew::{function_component, html, Html};
@@ -8,7 +8,7 @@ use yew::{function_component, html, Html};
 pub fn App() -> Html {
     html! {
         <div style="padding: 8px;display: flex;justify-content:space-between">
-            <Bin/>
+            <BinComponent/>
             <ClockComponent/>
         </div>
     }

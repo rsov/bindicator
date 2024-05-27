@@ -4,8 +4,6 @@ use std::time::Duration;
 use yew::platform::time::interval;
 use yew::{html, Component, Context, Html};
 
-const ONE_SEC: Duration = Duration::from_secs(1);
-
 pub struct ClockComponent {
     current_time: DateTime<Local>,
 }
@@ -19,7 +17,7 @@ impl Component for ClockComponent {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        let time_steam = interval(ONE_SEC).map(|_| Local::now());
+        let time_steam = interval(Duration::from_secs(1)).map(|_| Local::now());
         ctx.link().send_stream(time_steam.map(Msg::ClockTicked));
 
         Self {

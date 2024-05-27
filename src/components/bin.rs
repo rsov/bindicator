@@ -1,6 +1,11 @@
 use chrono::prelude::*;
-use chrono::Weekday;
-use yew::{function_component, html, AttrValue, Html, Properties};
+use chrono::{DateTime, Local, Weekday};
+use futures::StreamExt;
+use std::time::Duration;
+use yew::platform::time::interval;
+use yew::{function_component, html, AttrValue, Component, Context, Html, Properties};
+
+const REFRESH_HOURS: u64 = 1;
 
 pub enum BinVariation {
     Yellow,
@@ -31,17 +36,46 @@ pub fn get_today() -> DateTime<Local> {
     return current;
 }
 
-#[function_component]
-pub fn Bin() -> Html {
-    let current = get_today();
+pub struct BinComponent {
+    current_time: DateTime<Local>,
+}
 
-    html! {
+pub enum BinComponentMsg {
+    ClockTicked(DateTime<Local>),
+}
+
+impl Component for BinComponent {
+    type Message = BinComponentMsg;
+    type Properties = ();
+
+    fn create(ctx: &Context<Self>) -> Self {
+        let time_steam =
+            interval(Duration::from_secs(60 * 60 * REFRESH_HOURS)).map(|_| get_today());
+        ctx.link()
+            .send_stream(time_steam.map(BinComponentMsg::ClockTicked));
+
+        Self {
+            current_time: get_today(),
+        }
+    }
+
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            BinComponentMsg::ClockTicked(current_time) => {
+                self.current_time = current_time;
+            }
+        }
+        true
+    }
+
+    fn view(&self, _ctx: &Context<Self>) -> Html {
+        html! {
         <div>
             <h3>
-                if current.weekday() == Weekday::Mon {
+                if self.current_time.weekday() == Weekday::Mon {
                     {"BIN DAY TODAY!!"}
                 } else {
-                    {format!("Bin day in {} days", 7 -  current.weekday().num_days_from_monday())}
+                    {format!("Bin day in {} days", 7 -  self.current_time.weekday().num_days_from_monday())}
                 }
             </h3>
 
@@ -55,6 +89,7 @@ pub fn Bin() -> Html {
                 }
             </div>
         </div>
+        }
     }
 }
 
