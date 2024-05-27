@@ -1,20 +1,14 @@
-use yew::prelude::*;
+mod components;
+use components::bin::Bin;
+
+use yew::{function_component, html, Html};
 
 #[function_component]
-fn App() -> Html {
-    let counter = use_state(|| 0);
-    let onclick = {
-        let counter = counter.clone();
-        move |_| {
-            let value = *counter + 1;
-            counter.set(value);
-        }
-    };
-
+pub fn App() -> Html {
     html! {
         <div>
-            <button {onclick}>{ "+1" }</button>
-            <p>{ *counter }</p>
+            {"Hello world!"}
+            <Bin/>
         </div>
     }
 }

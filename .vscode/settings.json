@@ -1,0 +1,13 @@
+{
+    "rust-analyzer.check.allTargets": false,
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "BAUDRATE",
+        "Bindicator",
+        "gpio",
+        "mosi",
+        "slint",
+        "touchpad",
+        "twai"
+    ],
+}
