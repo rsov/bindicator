@@ -31,14 +31,13 @@ jobs:
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
         with:
-          # Upload entire repository
           path: './dist/'
       - name: Deploy to GitHub Pages
-        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
         id: deployment
         uses: actions/deploy-pages@v4    
