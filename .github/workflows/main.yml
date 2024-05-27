@@ -1,6 +1,10 @@
 name: Main
 
-on: push
+on: 
+  push:
+    paths-ignore:
+      - "**/README.md"
+      - ".devcontainer/**"
 
 env:
   CARGO_TERM_COLOR: always
@@ -24,13 +28,17 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
       - name: Build
         run: trunk build --release --public-url https://rsov.github.io/bindicator/
+      
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
         with:
           # Upload entire repository
           path: './dist/'
       - name: Deploy to GitHub Pages
+        if: ${{ ! startsWith(github.ref, 'refs/heads/production') }}
         id: deployment
         uses: actions/deploy-pages@v4    
