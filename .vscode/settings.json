@@ -4,6 +4,7 @@
     "cSpell.words": [
         "BAUDRATE",
         "Bindicator",
+        "chrono",
         "gpio",
         "mosi",
         "slint",

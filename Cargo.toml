@@ -4,4 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-yew =  {version = "0.21.0", features = ["csr"]}
+chrono = "0.4.38"
+yew = { version = "0.21.0", features = ["csr"] }
