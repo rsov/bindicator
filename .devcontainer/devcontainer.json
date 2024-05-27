@@ -8,10 +8,10 @@
 		"args": {
 			"CONTAINER_USER": "crab"
 		},
-		"mounts": [
-			"source=${localEnv:HOME}/.ssh,target=/home/crab/.ssh,type=bind,consistency=cached"
-		]
 	},
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/crab/.ssh,type=bind,consistency=cached"
+	],
 	"workspaceMount": "source=${localWorkspaceFolder},target=/home/crab/bindicator,type=bind,consistency=cached",
 	"workspaceFolder": "/home/crab/bindicator",
 	"customizations": {
