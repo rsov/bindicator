@@ -1,6 +1,7 @@
 {
     "rust-analyzer.check.allTargets": false,
     "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
     "cSpell.words": [
         "BAUDRATE",
         "Bindicator",

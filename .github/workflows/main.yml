@@ -1,6 +1,6 @@
 name: Main
 
-on: 
+on:
   push:
     paths-ignore:
       - "**/README.md"
@@ -28,16 +28,17 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
       - name: Build
         run: trunk build --release --public-url https://rsov.github.io/bindicator/
-      
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ github.ref == 'refs/heads/production' }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ github.ref == 'refs/heads/production' }}
         with:
           path: './dist/'
       - name: Deploy to GitHub Pages
-        if: ${{ startsWith(github.ref, 'refs/heads/production') }}
+        if: ${{ github.ref == 'refs/heads/production' }}
         id: deployment
-        uses: actions/deploy-pages@v4    
+        uses: actions/deploy-pages@v4
+
