@@ -23,7 +23,7 @@ pub fn get_alternate_bin() -> BinVariation {
 
     let wat = diff.num_days() % 14;
 
-    if wat != 0 && wat < 6 {
+    if wat != 0 && wat <= 7 {
         return BinVariation::Green;
     }
     return BinVariation::Yellow;
