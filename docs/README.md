@@ -7,6 +7,9 @@ Accessible via https://rsov.github.io/bindicator/
 Designed to be shown on 800x480 screen
 
 
+Weather docs: https://open-meteo.com/en/docs
+
+
 ## Local dev
 
 Open in vscode devcontainer
