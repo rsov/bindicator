@@ -6,6 +6,7 @@
         "BAUDRATE",
         "Bindicator",
         "chrono",
+        "gloo",
         "gpio",
         "mosi",
         "slint",
