@@ -32,11 +32,13 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
         if: ${{ github.ref == 'refs/heads/production' }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         if: ${{ github.ref == 'refs/heads/production' }}
         with:
           path: './dist/'
+
       - name: Deploy to GitHub Pages
         if: ${{ github.ref == 'refs/heads/production' }}
         id: deployment
