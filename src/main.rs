@@ -9,7 +9,7 @@ use yew::{function_component, html, Html};
 pub fn App() -> Html {
     html! {
         <div>
-            <div style="padding: 8px;display: flex;justify-content:space-between">
+            <div class="p-2 d-flex justify-content-between">
                 <BinComponent/>
                 <ClockComponent/>
             </div>

@@ -71,15 +71,15 @@ impl Component for BinComponent {
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
         <div>
-            <h3>
+            <p class="fs-3">
                 if self.current_time.weekday() == Weekday::Mon {
                     {"BIN DAY TODAY!!"}
                 } else {
                     {format!("Bin day in {} days", 7 -  self.current_time.weekday().num_days_from_monday())}
                 }
-            </h3>
+            </p>
 
-            <div style="margin-top: 8px;">
+            <div>
                 <BinSVG color="red" />
                 {
                     match get_alternate_bin() {
