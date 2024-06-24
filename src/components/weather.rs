@@ -1,9 +1,14 @@
+use charming::{
+    component::{Axis, Grid},
+    element::{AxisTick, AxisType, LineStyle, SplitLine, Symbol},
+    series::Line,
+    Chart, WasmRenderer,
+};
 use chrono::{DateTime, Local};
 use gloo_console::log;
 use gloo_net::http::Request;
 use serde::{de::DeserializeOwned, Deserialize};
-use yew::platform::spawn_local;
-use yew::prelude::*;
+use yew::{platform::spawn_local, prelude::*};
 use yew_hooks::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Default)]
@@ -81,36 +86,11 @@ pub fn WeatherComponent() -> Html {
     let offset_sec = weather.utc_offset_seconds / 60 / 60;
     let offset_hours = format!("+{offset_sec}:00");
 
-    let current_time = Local::now();
-
     html! {
         <>
-            <div style="display: flex; gap: 8px; overflow: scroll">
-            {
-                weather.hourly.time.clone().iter().enumerate().map(|(i, time)| {
-                    let temp = weather.hourly.temperature_2m.clone()[i];
-                    let precipitation = weather.hourly.precipitation.clone()[i];
+            <HourlyComponent data={weather.hourly.clone()} offset_hours={offset_hours.clone()} />
 
-                    let date = DateTime::parse_from_rfc3339(&format!("{time}:00{offset_hours}"));
-
-                    if date.is_ok() && date.unwrap() >= current_time {
-                        let props = HourlyComponentProps {
-                            date: date.unwrap().to_owned().into(),
-                            temp: temp.to_owned(),
-                            precipitation: precipitation.to_owned(),
-                        };
-                        html!{
-                            <HourlyComponent ..props.clone() />
-                        }
-                    } else {
-                        html!{}
-                    }
-
-                }).collect::<Html>()
-            }
-            </div>
-
-            <div class="card-group p-2">
+            <div class="card-group">
             {
                 weather.daily.time.clone().iter().enumerate().map(|(i, time)| {
                     let temp_max = weather.daily.temperature_2m_max.clone()[i];
@@ -148,22 +128,71 @@ pub fn WeatherComponent() -> Html {
 
 #[derive(Clone, PartialEq, Properties)]
 struct HourlyComponentProps {
-    date: DateTime<Local>,
-    temp: f32,
-    precipitation: f32,
+    data: WeatherHourly,
+    offset_hours: String,
 }
 
 #[function_component]
 fn HourlyComponent(props: &HourlyComponentProps) -> Html {
-    html! {
-    <div>
-        {format!("{:.0} °C", props.temp)}
-        <br/>
-        { format!("{}", props.date.format("%H:%M")) }<br/>
-        if props.precipitation > 0.0 {
-            {props.precipitation}{" mm"}<br/>
+    let current_time = Local::now();
+
+    let mut time = Vec::new();
+    let mut temp = Vec::new();
+
+    let offset_hours = props.offset_hours.clone();
+
+    for (i, time_stamp) in props.data.time.clone().iter().enumerate() {
+        if time.len() > 48 {
+            break;
         }
-    </div>
+
+        // let precipitation = weather.hourly.precipitation.clone()[i];
+
+        let date = DateTime::parse_from_rfc3339(&format!("{time_stamp}:00{offset_hours}"));
+
+        if date.is_ok() && date.unwrap() >= current_time {
+            time.push(format!("{}", date.unwrap().format("%H:%M")));
+            temp.push(props.data.temperature_2m[i]);
+        } else {
+        }
+    }
+
+    let f = use_async::<_, _, ()>({
+        let chart = Chart::new()
+            .x_axis(
+                Axis::new()
+                    .type_(AxisType::Category)
+                    .data(time.clone())
+                    .axis_tick(AxisTick::new().show(false)),
+            )
+            .y_axis(
+                Axis::new()
+                    .type_(AxisType::Value)
+                    .split_line(SplitLine::new().line_style(LineStyle::new().color("grey"))),
+            )
+            .series(
+                Line::new()
+                    .data(temp.clone())
+                    .symbol(Symbol::None)
+                    .line_style(LineStyle::new().width(5).color("white")),
+            )
+            .grid(Grid::new().top(7).left(25).right(24).bottom(20));
+
+        let renderer = WasmRenderer::new(800, 120);
+
+        async move {
+            renderer.render("chart", &chart).unwrap();
+            Ok(())
+        }
+    });
+
+    use_effect_with(time.clone(), move |_| {
+        f.run();
+        || ()
+    });
+
+    html! {
+        <div id="chart"></div>
     }
 }
 
@@ -182,10 +211,10 @@ struct DailyComponentProps {
 fn DailyComponent(props: &DailyComponentProps) -> Html {
     html! {
     <div class="card">
-        <div class="card-header text-center">
+        <div class="card-header text-center p-0">
             { format!("{}", props.date.format("%a")) }
         </div>
-        <div class="card-body p-1 d-flex flex-column align-items-center gap-2">
+        <div class="card-body d-flex flex-column align-items-center gap-1 p-0">
             <CodeIconComponent code={props.weather_code} />
             <div class="text-nowrap">
                 {format!("{:.0}", props.temp_min)}
@@ -215,7 +244,7 @@ struct CodeIconProps {
 fn CodeIconComponent(props: &CodeIconProps) -> Html {
     let class = format!("wi wi-wmo4680-{}", props.code);
     html! {
-        <div class="display-2">
+        <div class="display-3">
             <i class={class}></i>
         </div>
     }
