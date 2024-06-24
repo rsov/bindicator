@@ -8,7 +8,7 @@ use yew::{function_component, html, Html};
 #[function_component]
 pub fn App() -> Html {
     html! {
-        <div>
+        <div id="app" class="d-flex flex-column justify-content-between">
             <div class="p-2 d-flex justify-content-between">
                 <BinComponent/>
                 <ClockComponent/>
