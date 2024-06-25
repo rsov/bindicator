@@ -12,6 +12,12 @@ use yew::{platform::spawn_local, prelude::*};
 use yew_hooks::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Default)]
+struct GeoLocationApiData {
+    latitude: f32,
+    longitude: f32,
+}
+
+#[derive(Debug, Clone, PartialEq, Deserialize, Default)]
 struct WeatherApiData {
     latitude: f32,
     daily: WeatherDaily,
@@ -37,11 +43,40 @@ struct WeatherHourly {
     time: Vec<String>,
 }
 
+#[derive(Debug, Clone, PartialEq, Deserialize, Default)]
+struct GeoState {
+    loading: bool,
+    latitude: f32,
+    longitude: f32,
+}
+
 #[function_component]
 pub fn WeatherComponent() -> Html {
-    let geo_state = use_geolocation();
+    let geo_state = use_state(|| GeoState {
+        loading: true,
+        ..Default::default()
+    });
+
     let weather = use_state(|| WeatherApiData {
         ..Default::default()
+    });
+
+    let geo_state_clone = geo_state.clone();
+    use_effect(move || {
+        spawn_local({
+            async move {
+                let url = String::from("https://freeipapi.com/api/json/1.1.1.1");
+                let data = fetch::<GeoLocationApiData>(url).await;
+
+                log!(format!("{:?}", data));
+
+                geo_state_clone.set(GeoState {
+                    loading: false,
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                });
+            }
+        });
     });
 
     let weather_clone = weather.clone();
