@@ -279,7 +279,7 @@ struct CodeIconProps {
 
 #[function_component]
 fn CodeIconComponent(props: &CodeIconProps) -> Html {
-    let class = format!("wi wi-wmo4680-{}", props.code);
+    let class = format!("wi wi-wmo4680-{} text-white", props.code);
     html! {
         <div class="display-3">
             <i class={class}></i>
