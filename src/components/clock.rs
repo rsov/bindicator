@@ -36,7 +36,7 @@ impl Component for ClockComponent {
 
     fn view(&self, _ctx: &Context<Self>) -> Html {
         html! {
-            <div class="fs-4 text-end">
+            <div class="fs-1 text-end text-white">
                 { format!("{}", self.current_time.format("%d %b %Y")) }
                 <br/>
                 { format!("{}", self.current_time.format("%H : %M : %S")) }

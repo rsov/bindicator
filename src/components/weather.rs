@@ -64,6 +64,11 @@ pub fn WeatherComponent() -> Html {
     let geo_state_clone = geo_state.clone();
     use_effect(move || {
         spawn_local({
+            // Infinite loop lol
+            if geo_state_clone.loading == false {
+                return;
+            }
+
             async move {
                 let url = String::from("https://freeipapi.com/api/json/1.1.1.1");
                 let data = fetch::<GeoLocationApiData>(url).await;
@@ -125,7 +130,7 @@ pub fn WeatherComponent() -> Html {
         <>
             <HourlyComponent data={weather.hourly.clone()} offset_hours={offset_hours.clone()} />
 
-            <div class="card-group">
+            <div class="card-group text-white">
             {
                 weather.daily.time.clone().iter().enumerate().map(|(i, time)| {
                     let temp_max = weather.daily.temperature_2m_max.clone()[i];
@@ -246,24 +251,21 @@ struct DailyComponentProps {
 fn DailyComponent(props: &DailyComponentProps) -> Html {
     html! {
     <div class="card">
-        <div class="card-header text-center p-0">
+        <div class="card-header text-center p-0 text-white">
             { format!("{}", props.date.format("%a")) }
         </div>
         <div class="card-body d-flex flex-column align-items-center gap-1 p-0">
             <CodeIconComponent code={props.weather_code} />
-            <div class="text-nowrap">
-                {format!("{:.0}", props.temp_min)}
-                {" - "}
-                {format!("{:.0}", props.temp_max)}
-                {" ºC"}
+            <div class="text-nowrap text-white fw-bold fs-5">
+                {format!("{:.0} - {:.0}  ºC", props.temp_min, props.temp_max)}
             </div>
-            <div class="text-nowrap">
-                { format!("{}", props.sunrise.format("%H:%M")) }
-                {" - "}
-                { format!("{}", props.sunset.format("%H:%M")) }
+            <div class="text-nowrap text-white fw-bold">
+                { format!("{} - {}", props.sunrise.format("%H:%M"), props.sunset.format("%H:%M")) }
             </div>
             if props.precipitation_sum > 0.0 {
-                <div>{props.precipitation_sum}{" mm"}</div>
+                <div class="text-white">
+                    {props.precipitation_sum}{" mm"}
+                </div>
             }
         </div>
     </div>
