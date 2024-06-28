@@ -81,7 +81,7 @@ impl Component for BinComponent {
                     }
                 }
 
-                <div class="fs-1 text-white">
+                <div class="fs-1 fw-bold text-white">
                     if self.current_time.weekday() == Weekday::Mon {
                         {"BIN DAY TODAY!!"}
                     } else {
