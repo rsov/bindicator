@@ -52,76 +52,72 @@ struct GeoState {
 
 #[function_component]
 pub fn WeatherComponent() -> Html {
-    let geo_state = use_state(|| GeoState {
-        loading: true,
-        ..Default::default()
-    });
+    let update_every_millis = 1000 * 60 * 60;
+    let trigger = use_force_update();
 
     let weather = use_state(|| WeatherApiData {
         ..Default::default()
     });
 
-    let geo_state_clone = geo_state.clone();
-    use_effect(move || {
-        spawn_local({
-            // Infinite loop lol
-            if geo_state_clone.loading == false {
-                return;
-            }
+    let weather_clone1 = weather.clone();
+    use_interval(
+        move || {
+            weather_clone1.set((|| WeatherApiData {
+                ..Default::default()
+            })());
 
+            trigger.force_update()
+        },
+        update_every_millis,
+    );
+
+    let weather_clone = weather.clone();
+
+    use_effect(move || {
+        if weather_clone.latitude != 0.0 {
+            return;
+        }
+
+        spawn_local({
             async move {
                 let url = String::from("https://freeipapi.com/api/json/1.1.1.1");
                 let data = fetch::<GeoLocationApiData>(url).await;
 
                 log!(format!("{:?}", data));
 
-                geo_state_clone.set(GeoState {
-                    loading: false,
-                    latitude: data.latitude,
-                    longitude: data.longitude,
+                let params = [
+                    ["latitude", &data.latitude.to_string()],
+                    ["longitude", &data.longitude.to_string()],
+                    ["timezone", &"auto".to_string()],
+                    ["hourly", &["temperature_2m", "precipitation"].join(",")],
+                    [
+                        "daily",
+                        &[
+                            "weather_code",
+                            "sunrise",
+                            "sunset",
+                            "temperature_2m_max",
+                            "temperature_2m_min",
+                            "precipitation_sum",
+                        ]
+                        .join(","),
+                    ],
+                ]
+                .map(|x| x.join("="))
+                .join("&");
+
+                let url = "https://api.open-meteo.com/v1/forecast?".to_string() + &params;
+
+                spawn_local({
+                    async move {
+                        let data = fetch::<WeatherApiData>(url).await;
+                        log!(format!("{:?}", data));
+                        weather_clone.set(data);
+                    }
                 });
             }
         });
     });
-
-    let weather_clone = weather.clone();
-    use_effect_update_with_deps(
-        move |geo_state| {
-            let params = [
-                ["latitude", &geo_state.latitude.to_string()],
-                ["longitude", &geo_state.longitude.to_string()],
-                ["timezone", &"auto".to_string()],
-                ["hourly", &["temperature_2m", "precipitation"].join(",")],
-                [
-                    "daily",
-                    &[
-                        "weather_code",
-                        "sunrise",
-                        "sunset",
-                        "temperature_2m_max",
-                        "temperature_2m_min",
-                        "precipitation_sum",
-                    ]
-                    .join(","),
-                ],
-            ]
-            .map(|x| x.join("="))
-            .join("&");
-
-            let url = "https://api.open-meteo.com/v1/forecast?".to_string() + &params;
-
-            spawn_local({
-                async move {
-                    let data = fetch::<WeatherApiData>(url).await;
-                    log!(format!("{:?}", data));
-                    weather_clone.set(data);
-                }
-            });
-
-            || {}
-        },
-        geo_state.clone(),
-    );
 
     let offset_sec = weather.utc_offset_seconds / 60 / 60;
     let offset_hours = format!("+{offset_sec}:00");
