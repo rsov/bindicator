@@ -31,6 +31,7 @@ struct WeatherDaily {
     temperature_2m_min: Vec<f32>,
     time: Vec<String>,
     precipitation_sum: Vec<f32>,
+    precipitation_probability_max: Vec<i32>,
     weather_code: Vec<i32>,
     sunrise: Vec<String>,
     sunset: Vec<String>,
@@ -99,6 +100,7 @@ pub fn WeatherComponent() -> Html {
                             "temperature_2m_max",
                             "temperature_2m_min",
                             "precipitation_sum",
+                            "precipitation_probability_max",
                         ]
                         .join(","),
                     ],
@@ -132,6 +134,7 @@ pub fn WeatherComponent() -> Html {
                     let temp_max = weather.daily.temperature_2m_max.clone()[i];
                     let temp_min = weather.daily.temperature_2m_min.clone()[i];
                     let precipitation = weather.daily.precipitation_sum.clone()[i];
+                    let precipitation_probability_max = weather.daily.precipitation_probability_max.clone()[i];
                     let code = weather.daily.weather_code.clone()[i];
 
                     let date = DateTime::parse_from_rfc3339(&format!("{time}T00:00:00{offset_hours}"));
@@ -144,6 +147,7 @@ pub fn WeatherComponent() -> Html {
                             temp_max: temp_max.to_owned(),
                             temp_min: temp_min.to_owned(),
                             precipitation_sum: precipitation.to_owned(),
+                            precipitation_probability_max: precipitation_probability_max.to_owned(),
                             date: date.unwrap().to_owned().into(),
                             sunrise: sunrise.unwrap().to_owned().into(),
                             sunset: sunset.unwrap().to_owned().into(),
@@ -249,6 +253,7 @@ struct DailyComponentProps {
     temp_min: f32,
     temp_max: f32,
     precipitation_sum: f32,
+    precipitation_probability_max: i32,
     sunrise: DateTime<Local>,
     sunset: DateTime<Local>,
 }
@@ -270,7 +275,7 @@ fn DailyComponent(props: &DailyComponentProps) -> Html {
             </div>
             if props.precipitation_sum > 0.0 {
                 <div class="text-white">
-                    {props.precipitation_sum}{" mm"}
+                    {props.precipitation_sum}{"mm "}{props.precipitation_probability_max}{"% Max"}
                 </div>
             }
         </div>
