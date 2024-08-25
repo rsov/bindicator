@@ -274,8 +274,8 @@ fn DailyComponent(props: &DailyComponentProps) -> Html {
                 { format!("{} - {}", props.sunrise.format("%H:%M"), props.sunset.format("%H:%M")) }
             </div>
             if props.precipitation_sum > 0.0 {
-                <div class="text-white">
-                    {props.precipitation_sum}{"mm "}{props.precipitation_probability_max}{"% Max"}
+                <div class="text-white fw-bold">
+                    {format!("{}mm {}%", props.precipitation_sum, props.precipitation_probability_max)}
                 </div>
             }
         </div>
