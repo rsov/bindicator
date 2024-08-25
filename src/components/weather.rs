@@ -253,7 +253,7 @@ fn DailyComponent(props: &DailyComponentProps) -> Html {
         <div class="card-body d-flex flex-column align-items-center gap-1 p-0">
             <CodeIconComponent code={props.weather_code} />
             <div class="text-nowrap text-white fw-bold fs-5">
-                {format!("{:.0} - {:.0}  ºC", props.temp_min, props.temp_max)}
+                {format!("{:.0} - {:.0}  ºC", props.temp_max, props.temp_min)}
             </div>
             <div class="text-nowrap text-white fw-bold">
                 { format!("{} - {}", props.sunrise.format("%H:%M"), props.sunset.format("%H:%M")) }
