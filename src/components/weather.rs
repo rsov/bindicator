@@ -1,3 +1,5 @@
+use std::default;
+
 use charming::{
     component::{Axis, Grid},
     element::{AxisTick, AxisType, LineStyle, SplitLine, Symbol},
@@ -275,10 +277,27 @@ struct CodeIconProps {
 
 #[function_component]
 fn CodeIconComponent(props: &CodeIconProps) -> Html {
-    let class = format!("wi wi-wmo4680-{} text-white", props.code);
+    let class = match props.code {
+        0 => "wi-day-sunny",
+        1 | 2 | 3 => "wi-day-cloudy",
+        45 | 48 => "wi-fog",
+        51 | 53 | 55 => "wi-sprinkle",
+        56 | 57 => "wi-snow",
+        61 | 63 | 65 => "wi-raindrop",
+        66 | 67 => "wi-rain-mix",
+        71 | 73 | 75 => "wi-snowflake-cold",
+        77 => "wi-snow-wind",
+        80 | 81 | 82 => "wi-rain",
+        85 | 86 => "wi-day-snow-thunderstorm",
+        96 | 99 => "wi-day-thunderstorm",
+        95 => "wi-day-thunderstorm",
+        _ => "wi-meteor", // he-he-he-he
+    };
+
+    let icon_class = format!("wi {} text-white", class);
     html! {
         <div class="display-3">
-            <i class={class}></i>
+            <i class={icon_class}></i>
         </div>
     }
 }
