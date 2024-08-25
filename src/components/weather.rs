@@ -80,7 +80,7 @@ pub fn WeatherComponent() -> Html {
 
         spawn_local({
             async move {
-                let url = String::from("https://freeipapi.com/api/json/1.1.1.1");
+                let url = String::from("https://freeipapi.com/api/json");
                 let data = fetch::<GeoLocationApiData>(url).await;
 
                 log!(format!("{:?}", data));
@@ -247,7 +247,7 @@ struct DailyComponentProps {
 fn DailyComponent(props: &DailyComponentProps) -> Html {
     html! {
     <div class="card">
-        <div class="card-header text-center p-0 text-white fw-bold">
+        <div class="card-header text-center p-0 text-white">
             { format!("{}", props.date.format("%a")) }
         </div>
         <div class="card-body d-flex flex-column align-items-center gap-1 p-0">
