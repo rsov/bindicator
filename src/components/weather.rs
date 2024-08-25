@@ -1,5 +1,3 @@
-use std::default;
-
 use charming::{
     component::{Axis, Grid},
     element::{AxisTick, AxisType, LineStyle, SplitLine, Symbol},
@@ -176,6 +174,7 @@ fn HourlyComponent(props: &HourlyComponentProps) -> Html {
 
     let mut time = Vec::new();
     let mut temp = Vec::new();
+    let mut rain = Vec::new();
 
     let offset_hours = props.offset_hours.clone();
 
@@ -191,6 +190,9 @@ fn HourlyComponent(props: &HourlyComponentProps) -> Html {
         if date.is_ok() && date.unwrap() >= current_time {
             time.push(format!("{}", date.unwrap().format("%H:%M")));
             temp.push(props.data.temperature_2m[i]);
+            if props.data.precipitation[i] > 0.0 {
+                rain.push(props.data.precipitation[i]);
+            }
         } else {
         }
     }
@@ -213,6 +215,12 @@ fn HourlyComponent(props: &HourlyComponentProps) -> Html {
                     .data(temp.clone())
                     .symbol(Symbol::None)
                     .line_style(LineStyle::new().width(5).color("white")),
+            )
+            .series(
+                Line::new()
+                    .data(rain.clone())
+                    .symbol(Symbol::None)
+                    .line_style(LineStyle::new().width(3).color("blue")),
             )
             .grid(Grid::new().top(7).left(25).right(24).bottom(20));
 
