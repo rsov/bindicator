@@ -291,8 +291,8 @@ struct CodeIconProps {
 #[function_component]
 fn CodeIconComponent(props: &CodeIconProps) -> Html {
     let class = match props.code {
-        0 => "wi-day-sunny",
-        1 | 2 | 3 => "wi-day-cloudy",
+        0 | 1 => "wi-day-sunny",
+        2 | 3 => "wi-day-cloudy",
         45 | 48 => "wi-fog",
         51 | 53 | 55 => "wi-sprinkle",
         56 | 57 => "wi-snow",
