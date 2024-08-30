@@ -1,6 +1,8 @@
 use charming::{
     component::{Axis, Grid},
-    element::{AxisTick, AxisType, LineStyle, SplitLine, Symbol},
+    element::{
+        AxisTick, AxisType, ItemStyle, LineStyle, MarkArea, MarkAreaData, SplitLine, Symbol,
+    },
     series::Line,
     Chart, WasmRenderer,
 };
@@ -218,7 +220,15 @@ fn HourlyComponent(props: &HourlyComponentProps) -> Html {
                 Line::new()
                     .data(temp.clone())
                     .symbol(Symbol::None)
-                    .line_style(LineStyle::new().width(5).color("white")),
+                    .line_style(LineStyle::new().width(5).color("white"))
+                    .mark_area(
+                        MarkArea::new()
+                            .item_style(ItemStyle::new().color("grey"))
+                            .data(vec![(
+                                MarkAreaData::new().x_axis("23:00"),
+                                MarkAreaData::new().x_axis("01:00"),
+                            )]),
+                    ),
             )
             .series(
                 Line::new()
