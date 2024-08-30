@@ -1,10 +1,10 @@
 use charming::{
     component::{Axis, Grid, Legend},
     element::{
-        AxisLabel, AxisTick, AxisType, ItemStyle, LabelAlign, LineStyle, MarkArea, MarkAreaData,
-        SplitLine, Symbol, TextStyle, Tooltip, Trigger,
+        AxisLabel, AxisTick, AxisType, ItemStyle, LineStyle, MarkArea, MarkAreaData, SplitLine,
+        TextStyle,
     },
-    series::{Align, Line},
+    series::Line,
     Chart, WasmRenderer,
 };
 use chrono::{DateTime, Local};
