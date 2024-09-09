@@ -12,9 +12,16 @@ use yew_hooks::use_timeout;
 #[function_component]
 pub fn App() -> Html {
     let current: DateTime<Local> = Local::now();
-    let date = current.date_naive();
+    let tomorrow = current
+        .checked_add_days(chrono::Days::new(1))
+        .unwrap()
+        .date_naive();
+
     let midnight = NaiveTime::from_hms_opt(0, 0, 0).unwrap();
-    let midnight = date.and_time(midnight).and_local_timezone(Local).unwrap();
+    let midnight = tomorrow
+        .and_time(midnight)
+        .and_local_timezone(Local)
+        .unwrap();
 
     // Reload the whole page at midnight so it can apply new code from github (if any)
     use_timeout(
