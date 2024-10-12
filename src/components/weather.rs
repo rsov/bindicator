@@ -259,6 +259,7 @@ fn HourlyComponent(props: &HourlyComponentProps) -> Html {
                 Line::new()
                     .name("Precipitation")
                     .data(rain.clone())
+                    .y_axis_index(1)
                     .show_symbol(false)
                     .item_style(ItemStyle::new().color("blue"))
                     .line_style(LineStyle::new().width(3).color("blue")),
