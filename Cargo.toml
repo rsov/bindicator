@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-charming = { version = "0.3.1", features = ["wasm"] }
+charming = { version = "0.4.0", features = ["wasm"] }
 chrono = "0.4.38"
 futures = "0.3.30"
 gloo-console = "0.3.0"
