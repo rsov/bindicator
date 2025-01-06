@@ -3,8 +3,8 @@
         "rust-lang.rust-analyzer",
         "tamasfe.even-better-toml",
         "mutantdino.resourcemonitor",
-        "serayuzgur.crates",
         "streetsidesoftware.code-spell-checker",
-        "techtheawesome.rust-yew"
+        "techtheawesome.rust-yew",
+        "fill-labs.dependi"
     ]
 }
