@@ -9,7 +9,7 @@ const REFRESH_HOURS: u64 = 1;
 
 pub enum BinVariation {
     Yellow,
-    Green,
+    None,
 }
 
 // Red bin is weekly
@@ -24,7 +24,7 @@ pub fn get_alternate_bin() -> BinVariation {
     let wat = diff.num_days() % 14;
 
     if wat != 0 && wat <= 7 {
-        return BinVariation::Green;
+        return BinVariation::None;
     }
     return BinVariation::Yellow;
 }
@@ -73,11 +73,12 @@ impl Component for BinComponent {
             <div class="d-flex align-items-center">
 
                 <BinSVG color="red" />
+                <BinSVG color="green"  />
 
                 {
                     match get_alternate_bin() {
-                        BinVariation::Green  => html! { <BinSVG color="green"  /> },
-                        BinVariation::Yellow => html! { <BinSVG color="orange" /> }
+                        BinVariation::Yellow => html! { <BinSVG color="orange" /> },
+                        BinVariation::None => html! { }
                     }
                 }
 
