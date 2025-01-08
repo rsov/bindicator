@@ -22,10 +22,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Get trunk
         uses: jetli/trunk-action@v0.5.0
+
       - name: Add WASM
         run: rustup target add wasm32-unknown-unknown
+
       - name: Build
         run: trunk build --release --public-url https://rsov.github.io/bindicator/
 
