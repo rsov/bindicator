@@ -1,4 +1,5 @@
 pub mod bin;
+pub mod carousel;
 pub mod clock;
 pub mod dim;
 pub mod weather;

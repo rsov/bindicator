@@ -1,8 +1,9 @@
 mod components;
-use components::bin::BinComponent;
+use components::carousel::Carousel;
 use components::clock::ClockComponent;
 use components::dim::DimComponent;
 use components::weather::WeatherComponent;
+use components::{bin::BinComponent, carousel::CarouselItem};
 
 mod context;
 use context::{location::LocationProvider, weather::WeatherProvider};
@@ -21,9 +22,17 @@ pub fn App() -> Html {
                 <ClockComponent/>
             </div>
             <LocationProvider>
-                <WeatherProvider>
-                    <WeatherComponent/>
-                </WeatherProvider>
+
+                <Carousel>
+
+                    <CarouselItem active={true}>
+                        <WeatherProvider>
+                            <WeatherComponent/>
+                        </WeatherProvider>
+                    </CarouselItem>
+
+                </Carousel>
+
             </LocationProvider>
         </div>
     }
