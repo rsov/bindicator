@@ -9,6 +9,8 @@
         "gloo",
         "gpio",
         "mosi",
+        "onclick",
+        "onsubmit",
         "slint",
         "touchpad",
         "twai"

@@ -13,7 +13,7 @@ pub fn Carousel(props: &CarouselProps) -> Html {
     let id_target = format!("#{}", id_rand);
 
     html! {
-    <div id={id_rand} class="carousel slide">
+    <div id={id_rand} class="carousel slide h-100">
       <div class="carousel-inner">
         {props.children.clone()}
       </div>

@@ -2,6 +2,7 @@ mod components;
 use components::carousel::Carousel;
 use components::clock::ClockComponent;
 use components::dim::DimComponent;
+use components::location_input::LocationInput;
 use components::weather::WeatherComponent;
 use components::{bin::BinComponent, carousel::CarouselItem};
 
@@ -29,6 +30,10 @@ pub fn App() -> Html {
                         <WeatherProvider>
                             <WeatherComponent/>
                         </WeatherProvider>
+                    </CarouselItem>
+
+                    <CarouselItem active={false}>
+                        <LocationInput />
                     </CarouselItem>
 
                 </Carousel>

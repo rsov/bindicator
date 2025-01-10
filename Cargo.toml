@@ -9,8 +9,9 @@ chrono = "0.4.39"
 futures = "0.3.31"
 gloo-console = "0.3.0"
 gloo-net = "0.6.0"
+gloo-storage = "0.3.0"
 rand = "0.8.5"
 serde = { version = "1.0.217", features = ["derive"] }
-web-sys = "0.3.76"
+web-sys = { version = "0.3.76", features = ["HtmlFormElement"] }
 yew = { version = "0.21.0", features = ["csr"] }
 yew-hooks = "0.3.3"
