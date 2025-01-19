@@ -2,7 +2,7 @@ use chrono::{DateTime, Local, Timelike};
 use yew::{function_component, html, use_state, Html};
 use yew_hooks::use_interval;
 
-const REFRESH_HOURS: u32 = 1;
+const REFRESH_MILLIS: u32 = 900_000; // Every 15 minutes
 
 pub fn should_dim() -> bool {
     let current: DateTime<Local> = Local::now();
@@ -22,7 +22,7 @@ pub fn DimComponent() -> Html {
             move || {
                 state.set(should_dim());
             },
-            REFRESH_HOURS * 3_600_000,
+            REFRESH_MILLIS,
         );
     }
 
@@ -30,7 +30,7 @@ pub fn DimComponent() -> Html {
     html! {
         if *is_dim {
             <style>
-                { "body {opacity: 0.5; background-color: black}" }
+                { "body {opacity: 0.3; background-color: black}" }
             </style>
         }
     }
