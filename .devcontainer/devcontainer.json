@@ -7,7 +7,7 @@
 		"dockerfile": "./Dockerfile",
 		"args": {
 			"CONTAINER_USER": "crab"
-		},
+		}
 	},
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/crab/.ssh,type=bind,consistency=cached"
@@ -20,9 +20,9 @@
 				"mutantdino.resourcemonitor",
 				"tamasfe.even-better-toml",
 				"rust-lang.rust-analyzer",
-				"serayuzgur.crates",
 				"streetsidesoftware.code-spell-checker",
-				"TechTheAwesome.rust-yew"
+				"TechTheAwesome.rust-yew",
+				"fill-labs.dependi"
 			]
 		}
 	},
