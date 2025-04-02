@@ -7,7 +7,7 @@ const REFRESH_MILLIS: u32 = 900_000; // Every 15 minutes
 pub fn should_dim() -> bool {
     let current: DateTime<Local> = Local::now();
 
-    let daylight_hours = 6..20;
+    let daylight_hours = 7..20;
 
     return !daylight_hours.contains(&current.hour());
 }

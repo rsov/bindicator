@@ -24,7 +24,7 @@ pub fn App() -> Html {
             </div>
             <LocationProvider>
 
-                <Carousel id={"main"}>
+                <Carousel id="main">
 
                     <CarouselItem active={true}>
                         <WeatherProvider>

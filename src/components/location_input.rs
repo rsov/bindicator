@@ -107,7 +107,5 @@ pub fn LocationInput() -> Html {
                 <button class="btn btn-primary">{"Save"}</button>
             </form>
         </div>
-
-
     }
 }

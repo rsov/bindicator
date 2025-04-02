@@ -13,20 +13,20 @@ pub fn Carousel(props: &CarouselProps) -> Html {
     let id_target = format!("#{}", id_rand);
 
     html! {
-    <div id={id_rand} class="carousel slide h-100">
-      <div class="carousel-inner">
-        {props.children.clone()}
+      <div id={id_rand} class="carousel slide h-100">
+        <div class="carousel-inner">
+          {props.children.clone()}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target={id_target.clone()} data-bs-slide="prev">
+          // <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">{"Previous"}</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target={id_target} data-bs-slide="next">
+          // <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">{"Next"}</span>
+        </button>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target={id_target.clone()} data-bs-slide="prev">
-        // <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">{"Previous"}</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target={id_target} data-bs-slide="next">
-        // <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">{"Next"}</span>
-      </button>
-    </div>
-        }
+    }
 }
 
 #[derive(Properties, Debug, PartialEq)]
