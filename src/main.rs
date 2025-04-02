@@ -7,7 +7,7 @@ use components::weather::WeatherComponent;
 use components::{bin::BinComponent, carousel::CarouselItem};
 
 mod context;
-use context::{location::LocationProvider, weather::WeatherProvider};
+use context::{bussin::BusProvider, location::LocationProvider, weather::WeatherProvider};
 
 mod utils;
 
@@ -34,6 +34,11 @@ pub fn App() -> Html {
 
                     <CarouselItem active={false}>
                         <LocationInput />
+                    </CarouselItem>
+
+                    <CarouselItem active={false}>
+                        <BusProvider>
+                        </BusProvider>
                     </CarouselItem>
 
                 </Carousel>
