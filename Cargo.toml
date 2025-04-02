@@ -5,12 +5,11 @@ edition = "2021"
 
 [dependencies]
 charming = { version = "0.4.0", features = ["wasm"] }
-chrono = "0.4.39"
+chrono = "0.4.40"
 futures = "0.3.31"
 gloo-console = "0.3.0"
 gloo-net = "0.6.0"
 gloo-storage = "0.3.0"
-rand = "0.8.5"
 serde = { version = "1.0.217", features = ["derive"] }
 web-sys = { version = "0.3.77", features = ["HtmlFormElement"] }
 yew = { version = "0.21.0", features = ["csr"] }

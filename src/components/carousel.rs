@@ -1,15 +1,15 @@
-use rand::Rng;
 use yew::{function_component, html, Html, Properties};
 
 #[derive(Properties, Debug, PartialEq)]
 pub struct CarouselProps {
+    pub id: String,
     #[prop_or_default]
     pub children: Html,
 }
 
 #[function_component]
 pub fn Carousel(props: &CarouselProps) -> Html {
-    let id_rand: String = format!("carousel_{}", rand::thread_rng().gen_range(100..1000));
+    let id_rand: String = format!("carousel_{}", props.id);
     let id_target = format!("#{}", id_rand);
 
     html! {
