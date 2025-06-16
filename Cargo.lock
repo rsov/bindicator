@@ -134,9 +134,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "charming"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b8bbf1b08b7fbaa314067d8a4882832f155fcef947d66d8ac30bff4e108471f"
+checksum = "73ffae2e616ae7d66b2e9ea369f1c7650042bdcdc1dc08b04b027107007b4f09"
 dependencies = [
  "handlebars",
  "js-sys",
