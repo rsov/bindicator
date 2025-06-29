@@ -75,7 +75,7 @@ pub fn LocationProvider(props: &LocationProviderProps) -> Html {
         } else {
             spawn_local({
                 async move {
-                    let url = String::from("http://ipwho.is/");
+                    let url = String::from("https://ipwho.is/");
                     let data = fetch::<GeoLocationApiData>(url).await;
 
                     log!(format!("{:?}", data));
