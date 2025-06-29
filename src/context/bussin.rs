@@ -1,11 +1,10 @@
-use std::rc::Rc;
-
+use chrono::{DateTime, FixedOffset};
 use gloo_console::log;
-use serde::Deserialize;
+use serde_json::Value;
+use std::rc::Rc;
 use yew::{platform::spawn_local, prelude::*};
-use yew_hooks::use_interval;
 
-use crate::context::location::LocationContext;
+use crate::utils::fetch;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct BusCtx {
@@ -13,9 +12,22 @@ pub struct BusCtx {
     pub data: BusData,
 }
 
-#[derive(Debug, Clone, PartialEq, Deserialize, Default)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
+pub struct BusStopsStorage {
+    pub bus_stops: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default)]
 pub struct BusData {
-    pub utc_offset_seconds: i32,
+    pub departures: Vec<Departure>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default)]
+pub struct Departure {
+    pub number: String,
+    pub stop_name: String,
+    pub departure_time: DateTime<FixedOffset>,
+    pub is_cancelled: bool,
 }
 
 impl Reducible for BusCtx {
@@ -47,50 +59,81 @@ pub fn BusProvider(props: &BusProviderProps) -> Html {
         },
     });
 
-    let location_ctx = use_context::<LocationContext>().unwrap();
-
-    let data_clone = data.clone();
-    use_effect_with(location_ctx.coordinates.clone(), move |coordinates| {
-        // Wait till we get data
-        if coordinates.latitude == 0.0 {
-            return;
-        }
-
-        let coordinates_clone = coordinates.clone();
-        spawn_local(async move {
-            // let data = fetch_weather(coordinates_clone).await;
-            // data_clone.dispatch(BusData {
-            //     utc_offset_seconds: data.utc_offset_seconds,
-            // });
-        });
-    });
+    // let bus_ctx = use_context::<BusContext>().unwrap();
 
     let update_every_millis = 1000 * 60 * 60;
-    let coordinates_clone1 = location_ctx.coordinates.clone();
-    let data_clone1 = data.clone();
-    use_interval(
-        move || {
-            log!("In use interval");
-            // Wait till we get data
-            if coordinates_clone1.latitude == 0.0 {
-                return;
-            }
+    use_effect(move || {
+        // let stops_to_load = LocalStorage::get::<BusStopsStorage>("bus_stops");
 
-            let coordinates_clone2 = coordinates_clone1.clone();
-            let weather_clone2 = data_clone1.clone();
-            spawn_local(async move {
-                // let data = fetch_weather(coordinates_clone2).await;
-                // weather_clone2.dispatch(BusData {
-                //     utc_offset_seconds: data.utc_offset_seconds,
-                // });
-            });
-        },
-        update_every_millis,
-    );
+        // if stops_to_load.is_err() {
+        //     log!("Could not load stops from storage");
+        //     return;
+        // }
+
+        // let stops = stops_to_load.unwrap();
+        // if stops.bus_stops.len() == 0 {
+        //     return;
+        // }
+
+        // if stops.bus_stops.len() > 5 {
+        //     log!("Probably loading too much stops for now??");
+        //     return;
+        // }
+
+        spawn_local(async move {
+            // let data = fetch_departures("G123123".to_string()).await;
+            // data_clone.dispatcher(BusCtx {
+            //     is_loaded: true,
+            //     data: BusData { departures: data }
+            // })
+        });
+    });
 
     html! {
         <ContextProvider<BusContext> context={data}>
             {props.children.clone()}
         </ContextProvider<BusContext>>
     }
+}
+
+// https://transportnsw.info/api/trip/v1/departure-list-request?name=G12312312&type=stop&depArrMacro=dep&depType=stopEvents&excludedModes=2,9,11,1,4,7
+
+async fn fetch_departures(stop_number: String) -> Vec<Departure> {
+    let params = [
+        ["name", &stop_number.to_string()],
+        ["depArrMacro", &"dep".to_string()],
+        ["type", &"stop".to_string()],
+        ["depType", &"stopEvents".to_string()],
+        ["excludedModes", &"2,9,11,1,4,7".to_string()], // Only show busses for now
+    ]
+    .map(|x| x.join("="))
+    .join("&");
+
+    let url = "https://transportnsw.info/api/trip/v1/departure-list-request?".to_string() + &params;
+
+    let response = fetch::<String>(url).await;
+    log!(format!("{:?}", response));
+
+    let data: Value = serde_json::from_str(&response).unwrap();
+
+    let stop_events = data["stopEvents"].as_array().unwrap();
+    let mut departures = Vec::new();
+
+    for stop in stop_events {
+        departures.push(Departure {
+            departure_time: DateTime::parse_from_rfc3339(stop["departureTime"].as_str().unwrap())
+                .unwrap(),
+            number: stop["transportation"]["number"]
+                .as_str()
+                .unwrap()
+                .to_string(),
+            stop_name: stop["location"]["disassembledName"]
+                .as_str()
+                .unwrap()
+                .to_string(),
+            is_cancelled: stop["isCancelled"].as_bool().unwrap(),
+        });
+    }
+
+    return departures;
 }
