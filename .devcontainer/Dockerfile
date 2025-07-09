@@ -19,6 +19,5 @@ RUN rustup component add rustfmt
 # Specify wasm build target
 RUN rustup target add wasm32-unknown-unknown
 
-# Install binstall to get trunk (dev web server)
 RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
-RUN cargo binstall -y trunk
+RUN cargo binstall -y wasm-pack http-server
