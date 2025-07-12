@@ -1,20 +1,22 @@
 {
-    "rust-analyzer.check.allTargets": false,
-    "editor.formatOnSave": true,
-    "files.trimTrailingWhitespace": true,
-    "cSpell.words": [
-        "BAUDRATE",
-        "Bindicator",
-        "bussin",
-        "chrono",
-        "gloo",
-        "gpio",
-        "mosi",
-        "onclick",
-        "onsubmit",
-        "slint",
-        "Timelike",
-        "touchpad",
-        "twai"
-    ],
+  "rust-analyzer.check.allTargets": false,
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "cSpell.words": [
+    "BAUDRATE",
+    "bindgen",
+    "Bindicator",
+    "bussin",
+    "chrono",
+    "gloo",
+    "gpio",
+    "mosi",
+    "onclick",
+    "onsubmit",
+    "serde",
+    "slint",
+    "Timelike",
+    "touchpad",
+    "twai"
+  ]
 }
