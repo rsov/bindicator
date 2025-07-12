@@ -46,7 +46,8 @@ export component Time {
     }
 
     VerticalLayout {
-        alignment: center;
+        padding: 4px;
+        alignment: start;
         Text {
             text: time.hour + ":" + add-number-prefix(time.minute);
             horizontal-alignment: right;
@@ -59,7 +60,6 @@ export component Time {
             text: date.day + "-" + get-month(date.month) + "-" + date.year;
             horizontal-alignment: right;
             vertical-alignment: top;
-
             color: Palette.info-foreground;
             font-size: Style.H2-font-size;
         }
