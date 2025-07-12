@@ -1,8 +1,16 @@
 import { AboutSlint } from "std-widgets.slint";
+import { Api } from "./api.slint";
+import { Time } from "components/time.slint";
+
+export {Api}
 
 
 export component App inherits Window {
-    AboutSlint {
-        width: 100%;
+    width: 800px;
+    height: 480px;
+
+    Time {
+        time: Api.current-time;
+        date: Api.current-date;
     }
 }

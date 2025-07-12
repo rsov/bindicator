@@ -1,0 +1,21 @@
+import { Date, Time } from "std-widgets.slint";
+
+export global Api {
+    in property <float> indoor-temperature: 22.0;
+    in property <float> outdoor-temperature: 24.0;
+
+    in property <float> price-of-electricity: 13.0;
+    in property <float> current-electricity-use: 152.9;
+
+    in-out property <Date> current-date: {
+        year: 2025,
+        month: 3,
+        day: 18,
+    };
+
+    in-out property <Time> current-time: {
+        hour: 15,
+        minute: 12,
+        second: 33,
+    };
+}

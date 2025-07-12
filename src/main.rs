@@ -1,53 +1,43 @@
-mod components;
-use components::carousel::Carousel;
-use components::clock::ClockComponent;
-use components::dim::DimComponent;
-use components::location_input::LocationInput;
-use components::weather::WeatherComponent;
-use components::{bin::BinComponent, carousel::CarouselItem};
+use chrono::{Datelike, Local, Timelike};
+use slint::{Timer, TimerMode};
 
-mod context;
-use context::{bussin::BusProvider, location::LocationProvider, weather::WeatherProvider};
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
 
-mod utils;
+slint::include_modules!();
 
-use yew::{function_component, html, Html};
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
+pub fn main() {
+    // This provides better error messages in debug mode.
+    // It's disabled in release mode so it doesn't bloat up the file size.
+    #[cfg(all(debug_assertions, target_arch = "wasm32"))]
+    console_error_panic_hook::set_once();
 
-#[function_component]
-pub fn App() -> Html {
-    html! {
-        <div id="app" class="d-flex flex-column justify-content-between p-2" style="overflow: hidden;">
-            <DimComponent/>
-            <div class="d-flex justify-content-between">
-                <BinComponent/>
-                <ClockComponent/>
-            </div>
-            <LocationProvider>
+    let app = App::new().unwrap();
+    let app_weak = app.as_weak();
 
-                <Carousel id="main">
+    let timer = Timer::default();
+    timer.start(
+        TimerMode::Repeated,
+        std::time::Duration::from_millis(1000),
+        move || {
+            if let Some(app) = app_weak.upgrade() {
+                let api = app.global::<Api>();
+                let now = Local::now();
+                let mut date = Date::default();
+                date.year = now.year() as i32;
+                date.month = now.month() as i32;
+                date.day = now.day() as i32;
+                api.set_current_date(date);
 
-                    <CarouselItem active={true}>
-                        <WeatherProvider>
-                            <WeatherComponent/>
-                        </WeatherProvider>
-                    </CarouselItem>
+                let mut time = Time::default();
+                time.hour = now.hour() as i32;
+                time.minute = now.minute() as i32;
+                time.second = now.second() as i32;
+                api.set_current_time(time);
+            }
+        },
+    );
 
-                    <CarouselItem active={false}>
-                        <LocationInput />
-                    </CarouselItem>
-
-                    <CarouselItem active={false}>
-                        <BusProvider>
-                        </BusProvider>
-                    </CarouselItem>
-
-                </Carousel>
-
-            </LocationProvider>
-        </div>
-    }
-}
-
-fn main() {
-    yew::Renderer::<App>::new().render();
+    app.run().expect("AppWindow::run() failed");
 }
