@@ -1,4 +1,4 @@
-import { AboutSlint } from "std-widgets.slint";
+import { AboutSlint, VerticalBox } from "std-widgets.slint";
 import { Api } from "./api.slint";
 import { Time } from "components/time.slint";
 
@@ -9,8 +9,10 @@ export component App inherits Window {
     width: 800px;
     height: 480px;
 
-    Time {
-        time: Api.current-time;
-        date: Api.current-date;
+    VerticalBox {
+        Time {
+            time: Api.current-time;
+            date: Api.current-date;
+        }
     }
 }

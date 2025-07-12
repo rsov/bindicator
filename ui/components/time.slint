@@ -1,5 +1,3 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
 import { Palette, Style } from "../common.slint";
 import { Date, Time } from "std-widgets.slint";
 
@@ -8,26 +6,62 @@ export component Time {
     in property <Time> time;
     in property <Date> date;
 
-    HorizontalLayout {
-        alignment: center;
-        spacing: 20px;
-        VerticalLayout {
-            alignment: center;
-            Text {
-                text: time.hour + ":" + time.minute + ":" + time.second;
-                horizontal-alignment: center;
-                vertical-alignment: center;
-                color: Palette.info-foreground;
-                font-size: Style.H1-font-size;
-            }
+    function add-number-prefix(number: int) -> string {
+        if (number < 9) {
+            return "0" + number;
+        } else {
+            return number;
+        }
+    }
 
-            Text {
-                text: date.day + "-" + date.month + "-" + date.year;
-                horizontal-alignment: center;
-                vertical-alignment: center;
-                color: Palette.info-foreground;
-                font-size: Style.H1-font-size;
-            }
+    // I feel like this should be a UI later, backend just gives us a date object
+    function get-month(month: int) -> string {
+        if (month == 1) {
+            return "Jan";
+        } else if (month == 2) {
+            return "Feb";
+        } else if (month == 3) {
+            return "Mar";
+        } else if (month == 4) {
+            return "Apr";
+        } else if (month == 5) {
+            return "May";
+        } else if (month == 6) {
+            return "Jun";
+        } else if (month == 7) {
+            return "Jul";
+        } else if (month == 8) {
+            return "Aug";
+        } else if (month == 9) {
+            return "Sep";
+        } else if (month == 10) {
+            return "Oct";
+        } else if (month == 11) {
+            return "Nov";
+        } else if (month == 12) {
+            return "Dec";
+        } else {
+            return "WAT";
+        }
+    }
+
+    VerticalLayout {
+        alignment: center;
+        Text {
+            text: time.hour + ":" + add-number-prefix(time.minute);
+            horizontal-alignment: right;
+            vertical-alignment: top;
+            color: Palette.info-foreground;
+            font-size: Style.H1-font-size;
+        }
+
+        Text {
+            text: date.day + "-" + get-month(date.month) + "-" + date.year;
+            horizontal-alignment: right;
+            vertical-alignment: top;
+
+            color: Palette.info-foreground;
+            font-size: Style.H2-font-size;
         }
     }
 }
