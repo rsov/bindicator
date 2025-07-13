@@ -1,0 +1,12 @@
+import "../fa-regular-400.ttf";
+
+
+export component Bin {
+    in property <color> color;
+    Text {
+        font-size: 48px;
+        font-family: "Font Awesome 6 Free";
+        color: color;
+        text: @tr(""); // https://fontawesome.com/icons/trash-can?f=classic&s=regular
+    }
+}

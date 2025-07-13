@@ -1,4 +1,6 @@
-use chrono::{Datelike, Local, Timelike};
+use std::sync::Arc;
+
+use chrono::{Datelike, Local, TimeZone, Timelike};
 use slint::{Timer, TimerMode};
 
 #[cfg(target_arch = "wasm32")]
@@ -16,12 +18,15 @@ pub fn main() {
     let app = App::new().unwrap();
     let app_weak = app.as_weak();
 
+    let app_arc = Arc::new(app_weak);
+
+    let app_clock = Arc::clone(&app_arc);
     let timer = Timer::default();
     timer.start(
         TimerMode::Repeated,
         std::time::Duration::from_millis(1000),
         move || {
-            if let Some(app) = app_weak.upgrade() {
+            if let Some(app) = app_clock.upgrade() {
                 let api = app.global::<Api>();
                 let now = Local::now();
                 let mut date = Date::default();
@@ -39,5 +44,33 @@ pub fn main() {
         },
     );
 
+    let app_bin = Arc::clone(&app_arc);
+    Timer::default().start(
+        TimerMode::Repeated,
+        std::time::Duration::from_secs(60 * 60),
+        move || {
+            if let Some(app) = app_bin.upgrade() {
+                let api = app.global::<Api>();
+                api.set_is_yellow_bin(is_yellow_bin());
+            }
+        },
+    );
+
     app.run().expect("AppWindow::run() failed");
+}
+
+// Yellow alternate every week
+pub fn is_yellow_bin() -> bool {
+    let known_yellow_bin_day = Local.with_ymd_and_hms(2024, 5, 13, 0, 0, 0).unwrap();
+    let diff = Local::now() - known_yellow_bin_day;
+
+    // I threw 💩 until it sorta worked
+    // Good luck
+
+    let wat = diff.num_days() % 14;
+
+    if wat != 0 && wat <= 7 {
+        return false;
+    }
+    return true;
 }

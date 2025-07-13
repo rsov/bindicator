@@ -1,6 +1,7 @@
 import { AboutSlint, VerticalBox, HorizontalBox } from "std-widgets.slint";
 import { Api } from "./api.slint";
 import { Time } from "components/time.slint";
+import { Bin } from "components/bin.slint";
 
 export {Api}
 
@@ -10,6 +11,21 @@ export component App inherits Window {
     height: 480px;
 
     HorizontalLayout {
+
+        HorizontalBox {
+
+            Bin {
+                color: red;
+            }
+
+            Bin {
+                color: green;
+            }
+
+            if(Api.is-yellow-bin): Bin {
+                color: yellow;
+            }
+        }
 
         Time {
             time: Api.current-time;
