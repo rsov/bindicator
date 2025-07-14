@@ -47,14 +47,23 @@ pub fn main() {
         std::time::Duration::from_secs(60 * 60),
         move || {
             if let Some(app) = app_bin.upgrade() {
-                let api = app.global::<Api>();
-                api.set_is_yellow_bin(is_yellow_bin());
-                api.set_days_to_bin(get_days_to_bin());
+                set_bins(app.global::<Api>());
             }
         },
     );
 
+    // Set now instead of waiting for the timers to kick in
+    let app_now = Arc::clone(&app_arc);
+    if let Some(app) = app_now.upgrade() {
+        set_bins(app.global::<Api>());
+    }
+
     app.run().expect("AppWindow::run() failed");
+}
+
+pub fn set_bins(api: Api) {
+    api.set_is_yellow_bin(is_yellow_bin());
+    api.set_days_to_bin(get_days_to_bin());
 }
 
 // Yellow alternate every week
