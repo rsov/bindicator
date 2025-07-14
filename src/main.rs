@@ -53,6 +53,7 @@ pub fn main() {
             if let Some(app) = app_bin.upgrade() {
                 let api = app.global::<Api>();
                 api.set_is_yellow_bin(is_yellow_bin());
+                api.set_days_to_bin(get_days_to_bin());
             }
         },
     );
@@ -74,4 +75,12 @@ pub fn is_yellow_bin() -> bool {
         return false;
     }
     return true;
+}
+
+// Yellow alternate every week
+pub fn get_days_to_bin() -> i32 {
+    let known_yellow_bin_day = Local.with_ymd_and_hms(2024, 5, 13, 0, 0, 0).unwrap();
+    let diff = Local::now() - known_yellow_bin_day;
+
+    return (diff.num_days() % 7) as i32;
 }

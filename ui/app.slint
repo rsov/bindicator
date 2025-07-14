@@ -1,7 +1,7 @@
 import { AboutSlint, VerticalBox, HorizontalBox } from "std-widgets.slint";
 import { Api } from "./api.slint";
 import { Time } from "components/time.slint";
-import { Bin } from "components/bin.slint";
+import { Bins } from "components/bins.slint";
 
 export {Api}
 
@@ -10,26 +10,24 @@ export component App inherits Window {
     width: 800px;
     height: 480px;
 
-    HorizontalLayout {
+    VerticalLayout {
+        padding: 8px;
+        alignment: space-between;
 
-        HorizontalBox {
+        HorizontalLayout {
+            alignment: LayoutAlignment.space-between;
 
-            Bin {
-                color: red;
+            Bins {
+                is-yellow-bin: Api.is-yellow-bin;
+                days-to-bin: Api.days-to-bin;
             }
 
-            Bin {
-                color: green;
-            }
-
-            if(Api.is-yellow-bin): Bin {
-                color: yellow;
+            Time {
+                time: Api.current-time;
+                date: Api.current-date;
             }
         }
 
-        Time {
-            time: Api.current-time;
-            date: Api.current-date;
-        }
+        HorizontalLayout { }
     }
 }

@@ -1,0 +1,46 @@
+import "../fa-regular-400.ttf";
+import { Palette, Style } from "../common.slint";
+
+
+component Bin {
+    in property <color> color;
+    Text {
+        font-size: 48px;
+        font-family: "Font Awesome 6 Free";
+        color: color;
+        text: @tr(""); // https://fontawesome.com/icons/trash-can?f=classic&s=regular
+    }
+}
+
+export component Bins {
+    in property <bool> is-yellow-bin;
+    in property <int> days-to-bin;
+
+    VerticalLayout {
+        alignment: start;
+
+        HorizontalLayout {
+            alignment: start;
+            spacing: 8px;
+
+            Bin {
+                color: red;
+            }
+
+            Bin {
+                color: green;
+            }
+
+            if(is-yellow-bin): Bin {
+                color: yellow;
+            }
+
+            Text {
+                text: days-to-bin == 0 ? "BIN DAY TODAY" : "Days " + days-to-bin;
+                vertical-alignment: center;
+                color: Palette.info-foreground;
+                font-size: Style.H2-font-size;
+            }
+        }
+    }
+}
