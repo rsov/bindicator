@@ -1,11 +1,7 @@
-use std::sync::Arc;
-
 use chrono::{Datelike, Local, TimeZone, Timelike};
 use slint::{Timer, TimerMode};
-
+use std::sync::Arc;
 use wasm_bindgen::prelude::wasm_bindgen;
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
 
 slint::include_modules!();
 
@@ -77,7 +73,6 @@ pub fn is_yellow_bin() -> bool {
     return true;
 }
 
-// Yellow alternate every week
 pub fn get_days_to_bin() -> i32 {
     let known_yellow_bin_day = Local.with_ymd_and_hms(2024, 5, 13, 0, 0, 0).unwrap();
     let diff = Local::now() - known_yellow_bin_day;
