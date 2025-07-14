@@ -6,6 +6,8 @@ use crate::{bins::set_bins, clock::set_time};
 
 mod bins;
 mod clock;
+mod location;
+mod weather;
 
 slint::include_modules!();
 

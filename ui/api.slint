@@ -1,8 +1,15 @@
 import { Date, Time } from "std-widgets.slint";
 
+export struct Coordinates  {
+    longitude: float,
+    latitude: float,
+}
+
 export global Api {
     in-out property <bool> is-yellow-bin:true;
     in-out property <int> days-to-bin:0;
+
+    in-out property <Coordinates> coordinates;
 
     in-out property <Date> current-date: {
         year: 2025,
