@@ -7,7 +7,7 @@ export component Time {
     in property <Date> date;
 
     function add-number-prefix(number: int) -> string {
-        if (number < 9) {
+        if (number <= 9) {
             return "0" + number;
         } else {
             return number;
