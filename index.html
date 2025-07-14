@@ -1,31 +1,13 @@
 <!DOCTYPE html>
 <html>
-<!--
-    This is a static html file used to display the wasm build.
-    In order to generate the build
-     - Run `wasm-pack build --release --target web` in this directory.
-  -->
-
-
 <head>
     <meta charset="UTF-8">
-    <title>Slint Todo Demo (Web Assembly version)</title>
-    <link rel="stylesheet" href="https://slint.dev/css/demos-v1.css">
-    <link data-trunk rel="rust" data-target-name={potato} />
+    <title>Bindicator</title>
+    <link data-trunk rel="rust" />
 </head>
 
-<body>
-    <div id="spinner">
-        <h1>Loading...</h1>
-    </div>
+<body style="margin: 0; padding: 0; background-color: black;">
     <canvas id="canvas" unselectable="on" data-slint-auto-resize-to-preferred="true"></canvas>
-
-    <script type="module">
-        import init from './pkg/bindicator.js';
-        init().finally(() => {
-            document.getElementById("spinner").remove();
-        });
-    </script>
 </body>
 
 </html>

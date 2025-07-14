@@ -3,12 +3,13 @@ use std::sync::Arc;
 use chrono::{Datelike, Local, TimeZone, Timelike};
 use slint::{Timer, TimerMode};
 
+use wasm_bindgen::prelude::wasm_bindgen;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 slint::include_modules!();
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
+#[wasm_bindgen(main)]
 pub fn main() {
     // This provides better error messages in debug mode.
     // It's disabled in release mode so it doesn't bloat up the file size.
