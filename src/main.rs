@@ -2,7 +2,7 @@ use slint::{Timer, TimerMode};
 use std::sync::Arc;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{bins::set_bins, clock::set_time, location::set_location};
+use crate::{bins::set_bins, clock::set_time, location::set_location, weather::set_weather};
 
 mod bins;
 mod clock;
@@ -51,6 +51,7 @@ pub async fn main() {
     if let Some(app) = app_now.upgrade() {
         set_bins(app.global::<Api>());
         set_location(app.global::<Api>()).await;
+        set_weather(app.global::<Api>()).await;
     }
 
     app.run().expect("AppWindow::run() failed");

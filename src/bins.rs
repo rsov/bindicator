@@ -22,7 +22,7 @@ fn get_days_to_bin() -> i32 {
     let known_yellow_bin_day = Local.with_ymd_and_hms(2024, 5, 13, 0, 0, 0).unwrap();
     let diff = Local::now() - known_yellow_bin_day;
 
-    return (diff.num_days() % 7) as i32;
+    return (7 - diff.num_days() % 7) as i32;
 }
 
 pub fn set_bins(api: Api) {

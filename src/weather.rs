@@ -2,13 +2,6 @@ use serde::Deserialize;
 
 use crate::{Api, Coordinates};
 
-// Easier to deal with a single 'variable'
-#[derive(Debug, PartialEq, Clone)]
-pub struct WeatherCtx {
-    pub is_loaded: bool,
-    pub weather: WeatherData,
-}
-
 #[derive(Debug, Clone, PartialEq, Deserialize, Default)]
 pub struct WeatherData {
     pub daily: WeatherDaily,
@@ -82,5 +75,9 @@ async fn fetch_weather(coordinates: Coordinates) -> WeatherApiData {
 }
 
 pub async fn set_weather(api: Api<'_>) {
+    let coordinates = api.get_coordinates();
+    if coordinates.latitude == 0.0 {
+        return;
+    }
     // TODO: Move the wether types into slint UI
 }
