@@ -2,7 +2,7 @@ use slint::{Timer, TimerMode};
 use std::sync::Arc;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{bins::set_bins, clock::set_time};
+use crate::{bins::set_bins, clock::set_time, location::set_location};
 
 mod bins;
 mod clock;
@@ -12,7 +12,7 @@ mod weather;
 slint::include_modules!();
 
 #[wasm_bindgen(main)]
-pub fn main() {
+pub async fn main() {
     // This provides better error messages in debug mode.
     // It's disabled in release mode so it doesn't bloat up the file size.
     #[cfg(all(debug_assertions, target_arch = "wasm32"))]
@@ -50,6 +50,7 @@ pub fn main() {
     let app_now = Arc::clone(&app_arc);
     if let Some(app) = app_now.upgrade() {
         set_bins(app.global::<Api>());
+        set_location(app.global::<Api>()).await;
     }
 
     app.run().expect("AppWindow::run() failed");

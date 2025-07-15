@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use crate::{location::Coordinates, Api};
+use crate::{Api, Coordinates};
 
 // Easier to deal with a single 'variable'
 #[derive(Debug, PartialEq, Clone)]

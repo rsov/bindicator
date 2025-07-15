@@ -28,6 +28,14 @@ export component App inherits Window {
             }
         }
 
-        HorizontalLayout { }
+        HorizontalLayout {
+
+            Text {
+                text:  "longitude: " +Api.coordinates.longitude;
+            }
+            Text {
+                text:  "latitude: " +Api.coordinates.latitude;
+            }
+        }
     }
 }
