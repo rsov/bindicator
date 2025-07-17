@@ -5,9 +5,22 @@ export struct Coordinates  {
     latitude: float,
 }
 
+export struct WeatherDaily {
+    temperature_max: float,
+    temperature_min: float,
+    date: Date,
+    precipitation_sum: float,
+    precipitation_probability_max: int,
+    weather_code: int,
+    sunrise: Time,
+    sunset: Time,
+}
+
 export global Api {
     in-out property <bool> is-yellow-bin:true;
     in-out property <int> days-to-bin:0;
+
+    in-out property <[WeatherDaily]> weather_daily;
 
     in-out property <Coordinates> coordinates: {
         latitude: 0,
