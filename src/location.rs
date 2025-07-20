@@ -83,3 +83,7 @@ pub async fn set_location(api: Api<'_>) {
 
     api.set_coordinates(coordinates);
 }
+
+pub fn save_location(coordinates: Coordinates) {
+    store_into_local(STORAGE_KEY, coordinates);
+}

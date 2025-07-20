@@ -2,7 +2,12 @@ use slint::{Timer, TimerMode};
 use std::sync::Arc;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use crate::{bins::set_bins, clock::set_time, location::set_location, weather::set_weather};
+use crate::{
+    bins::set_bins,
+    clock::set_time,
+    location::{save_location, set_location},
+    weather::set_weather,
+};
 
 mod bins;
 mod clock;
@@ -52,6 +57,11 @@ pub async fn main() {
         set_bins(app.global::<Api>());
         set_location(app.global::<Api>()).await;
         set_weather(app.global::<Api>()).await;
+
+        app.global::<Api>()
+            .on_coordinates_updated(move |coordinates| {
+                save_location(coordinates);
+            });
     }
 
     app.run().expect("AppWindow::run() failed");

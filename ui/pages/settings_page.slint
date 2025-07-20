@@ -1,5 +1,5 @@
 import { LineEdit, Button } from "std-widgets.slint";
-import { Api, Pages } from "../api.slint";
+import { Api, Pages, Coordinates } from "../api.slint";
 
 export component SettingsPage {
     width: 100%;
@@ -8,20 +8,25 @@ export component SettingsPage {
     VerticalLayout {
         spacing: 1rem;
 
-        LineEdit {
-            input-type: number;
-            placeholder-text: "Lon";
+        lat := LineEdit {
+            input-type: decimal;
+            placeholder-text: "Lat";
         }
 
-        LineEdit {
-            input-type: number;
-            placeholder-text: "Lat";
+        lon := LineEdit {
+            input-type: decimal;
+            placeholder-text: "Lon";
         }
 
         Button {
             text: "Update location";
+
             clicked => {
-                 // Handle login logic here
+                Api.coordinates = {
+                    latitude: lat.text.to-float(),
+                    longitude: lon.text.to-float(),
+                };
+                Api.coordinates-updated(Api.coordinates);
             }
         }
 
