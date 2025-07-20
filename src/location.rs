@@ -25,7 +25,7 @@ async fn fetch_location() -> GeoLocationApiData {
         .unwrap()
         .json::<GeoLocationApiData>()
         .await
-        .unwrap();
+        .unwrap_or(GeoLocationApiData::default());
 
     return data;
 }
@@ -65,7 +65,6 @@ fn store_into_local(key: &str, coordinates: Coordinates) {
     }
 }
 
-// TODO: Read from storage later on
 pub async fn set_location(api: Api<'_>) {
     let from_location = fetch_from_local(STORAGE_KEY);
 
