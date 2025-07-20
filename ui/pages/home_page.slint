@@ -25,6 +25,12 @@ export component HomePage {
             }
         }
 
+        VerticalLayout {
+            for day[index] in Api.weather-daily: Text {
+                text: day.temperature-max;
+            }
+        }
+
         HorizontalLayout {
 
             Button {
