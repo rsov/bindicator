@@ -1,6 +1,6 @@
 use chrono::{DateTime, Datelike, Timelike};
 use serde::Deserialize;
-use slint::{Model, ModelRc, VecModel};
+use slint::VecModel;
 
 use crate::{Api, Coordinates, Date, Time, WeatherDaily};
 
@@ -83,6 +83,7 @@ pub async fn set_weather(api: Api<'_>) {
     let daily = api_data.daily.clone();
 
     let mut weather_daily: Vec<WeatherDaily> = vec![];
+
     api_data
         .daily
         .time
@@ -134,6 +135,5 @@ pub async fn set_weather(api: Api<'_>) {
             });
         });
 
-    // TODO: Figure this out
-    api.set_weather_daily(ModelRc::from(weather_daily));
+    api.set_weather_daily(VecModel::from_slice(&weather_daily));
 }
