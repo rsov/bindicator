@@ -1,0 +1,35 @@
+import { LineEdit, Button } from "std-widgets.slint";
+import { Api, Pages } from "../api.slint";
+
+export component SettingsPage {
+    width: 100%;
+    height: 100%;
+
+    VerticalLayout {
+        spacing: 1rem;
+
+        LineEdit {
+            input-type: number;
+            placeholder-text: "Lon";
+        }
+
+        LineEdit {
+            input-type: number;
+            placeholder-text: "Lat";
+        }
+
+        Button {
+            text: "Update location";
+            clicked => {
+                 // Handle login logic here
+            }
+        }
+
+        Button {
+            text: "Home";
+            clicked => {
+                Api.current-page = Pages.home;
+            }
+        }
+    }
+}
