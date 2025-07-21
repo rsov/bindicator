@@ -6,31 +6,41 @@ export component SettingsPage {
     height: 100%;
 
     VerticalLayout {
-        spacing: 1rem;
+        padding: 16px;
 
-        lat := LineEdit {
-            input-type: decimal;
-            placeholder-text: "Lat";
-        }
+        alignment: LayoutAlignment.space-between;
 
-        lon := LineEdit {
-            input-type: decimal;
-            placeholder-text: "Lon";
-        }
+        HorizontalLayout {
+            spacing: 1rem;
 
-        Button {
-            text: "Update location";
+            lat := LineEdit {
+                input-type: decimal;
+                height: 3rem;
+                placeholder-text: "Lat";
+            }
 
-            clicked => {
-                Api.coordinates = {
-                    latitude: lat.text.to-float(),
-                    longitude: lon.text.to-float(),
-                };
-                Api.coordinates-updated(Api.coordinates);
+            lon := LineEdit {
+                height: 3rem;
+                input-type: decimal;
+                placeholder-text: "Lon";
+            }
+
+            Button {
+                height: 3rem;
+                text: "Update location";
+
+                clicked => {
+                    Api.coordinates = {
+                        latitude: lat.text.to-float(),
+                        longitude: lon.text.to-float(),
+                    };
+                    Api.coordinates-updated(Api.coordinates);
+                }
             }
         }
 
         Button {
+            height: 3rem;
             text: "Home";
             clicked => {
                 Api.current-page = Pages.home;
