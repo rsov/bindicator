@@ -111,8 +111,8 @@ pub async fn set_weather(api: Api<'_>) {
     let offset_hours = format!("+{offset_sec}:00");
 
     api.set_weather_current(WeatherCurrent {
-        temperature: api_data.current.temperature_2m,
-        precipitation: api_data.current.precipitation,
+        temperature: api_data.current.temperature_2m as i32,
+        precipitation: api_data.current.precipitation as i32,
         weather_type: code_to_type(api_data.current.weather_code),
     });
 
