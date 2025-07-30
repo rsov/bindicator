@@ -13,16 +13,26 @@ export component SettingsPage {
         HorizontalLayout {
             spacing: 1rem;
 
+            Text {
+                text: "Lat:";
+                vertical-alignment: center;
+            }
+
             lat := LineEdit {
                 input-type: decimal;
                 height: 3rem;
-                placeholder-text: "Lat";
+                text: Api.coordinates.latitude;
+            }
+
+            Text {
+                text: "Lon:";
+                vertical-alignment: center;
             }
 
             lon := LineEdit {
                 height: 3rem;
                 input-type: decimal;
-                placeholder-text: "Lon";
+                text: Api.coordinates.longitude;
             }
 
             Button {

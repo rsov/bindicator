@@ -1,0 +1,28 @@
+import { WeatherType } from "../api.slint";
+import "../Font Awesome 7 Free-Solid-900.otf";
+
+export component WeatherIcon inherits Text {
+    in property <WeatherType> type;
+
+    // TODO: Finish maybe
+
+
+    text: ""; // https://fontawesome.com/icons/circle-question?f=classic&s=solid
+font-weight: 900;
+    font-family: "Font Awesome 7 Free";
+
+    states [
+        bind-text when type == WeatherType.sunny: {
+            text: "";  // https://fontawesome.com/icons/sun?f=classic&s=solid
+        }
+        bind-text when type == WeatherType.cloudy: {
+            text: ""; // https://fontawesome.com/icons/cloud?f=classic&s=solid
+        }
+        bind-text when type == WeatherType.rain: {
+            text: ""; // https://fontawesome.com/icons/cloud-showers-heavy?f=classic&s=solid
+        }
+        bind-text when type == WeatherType.sprinkle: {
+            text: ""; // https://fontawesome.com/icons/cloud-rain?f=classic&s=solid
+        }
+    ]
+}

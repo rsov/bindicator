@@ -1,4 +1,4 @@
-import "../fa-regular-400.ttf";
+import "../Font Awesome 7 Free-Regular-400.otf";
 import { Palette, Style } from "../common.slint";
 
 
@@ -16,31 +16,27 @@ export component Bins {
     in property <bool> is-yellow-bin;
     in property <int> days-to-bin;
 
-    VerticalLayout {
+    HorizontalLayout {
         alignment: start;
+        spacing: 16px;
 
-        HorizontalLayout {
-            alignment: start;
-            spacing: 8px;
+        Bin {
+            color: red;
+        }
 
-            Bin {
-                color: red;
-            }
+        Bin {
+            color: green;
+        }
 
-            Bin {
-                color: green;
-            }
+        if(is-yellow-bin): Bin {
+            color: yellow;
+        }
 
-            if(is-yellow-bin): Bin {
-                color: yellow;
-            }
-
-            Text {
-                text: days-to-bin == 0 ? "BIN DAY TODAY" : "Days " + days-to-bin;
-                vertical-alignment: center;
-                color: Palette.info-foreground;
-                font-size: Style.H2-font-size;
-            }
+        Text {
+            text: days-to-bin == 0 ? "BIN DAY TODAY" : "Days " + days-to-bin;
+            vertical-alignment: center;
+            color: Palette.info-foreground;
+            font-size: Style.H2-font-size;
         }
     }
 }

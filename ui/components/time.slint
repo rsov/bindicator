@@ -1,18 +1,10 @@
-import { Palette, Style } from "../common.slint";
+import { Palette, Style, Utils } from "../common.slint";
 import { Date, Time } from "std-widgets.slint";
 
 export component Time {
 
     in property <Time> time;
     in property <Date> date;
-
-    function add-number-prefix(number: int) -> string {
-        if (number <= 9) {
-            return "0" + number;
-        } else {
-            return number;
-        }
-    }
 
     // I feel like this should be a UI layer, backend just gives us a date object
     function get-month(month: int) -> string {
@@ -48,7 +40,7 @@ export component Time {
     VerticalLayout {
         alignment: start;
         Text {
-            text: time.hour + ":" + add-number-prefix(time.minute);
+            text: time.hour + ":" + Utils.add-number-prefix(time.minute);
             horizontal-alignment: right;
             vertical-alignment: top;
             color: Palette.info-foreground;

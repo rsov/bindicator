@@ -1,0 +1,31 @@
+import { WeatherCurrent } from "../api.slint";
+import { Style } from "../common.slint";
+import { WeatherIcon } from "./weather_icon.slint";
+
+export component WeatherCurrent {
+    in property <WeatherCurrent> current;
+
+    VerticalLayout {
+        alignment: start;
+        HorizontalLayout {
+            alignment: center;
+
+            Text {
+                text: current.temperature;
+                font-size: Style.H1-font-size;
+            }
+
+            Text {
+                text: "°C";
+                font-size: Style.H2-font-size;
+                vertical-alignment: center;
+            }
+        }
+
+        WeatherIcon {
+            horizontal-alignment: center;
+            font-size: Style.H1-font-size;
+            type: current.weather-type;
+        }
+    }
+}

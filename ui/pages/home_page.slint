@@ -1,7 +1,10 @@
+import { Button } from "std-widgets.slint";
+import { Api, Pages } from "../api.slint";
+import { Utils } from "../common.slint";
 import { Bins } from "../components/bins.slint";
 import { Time } from "../components/time.slint";
-import { Api, Pages } from "../api.slint";
-import { Button } from "std-widgets.slint";
+import { WeatherDaily } from "../components/weather_daily.slint";
+import { WeatherCurrent } from "../components/weather_current.slint";
 
 export component HomePage {
     width: 100%;
@@ -25,15 +28,21 @@ export component HomePage {
             }
         }
 
-        VerticalLayout {
-            for day[index] in Api.weather-daily: Text {
-                text: day.temperature-max;
+        HorizontalLayout {
+            WeatherCurrent {
+                current: Api.weather-current;
+            }
+
+            WeatherDaily {
+                daily: Api.weather-daily;
             }
         }
 
         HorizontalLayout {
+            alignment: space-between;
 
             Button {
+
                 text: "Settings";
                 clicked => {
                     Api.current-page = Pages.settings;
@@ -41,11 +50,7 @@ export component HomePage {
             }
 
             Text {
-                text: "longitude: " + Api.coordinates.longitude;
-            }
-
-            Text {
-                text: "latitude: " + Api.coordinates.latitude;
+                text: "Updated: " + Utils.add-number-prefix(Api.weather-updated-at.hour) + ":" + Utils.add-number-prefix(Api.weather-updated-at.minute) + ":" + Utils.add-number-prefix(Api.weather-updated-at.second);
             }
         }
     }

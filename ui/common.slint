@@ -1,5 +1,13 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
+
+export global Utils {
+    public pure function add-number-prefix(number: int) -> string {
+        if (number <= 9) {
+            return "0" + number;
+        } else {
+            return number;
+        }
+    }
+}
 
 export global Measurements {
     out property <length> zone-button-spacing: 30px;
@@ -22,19 +30,12 @@ export global Measurements {
 }
 
 export global Style {
-    out property <length> icon-title-font-size: 10px;
     out property <length> normal-font-size: 12px;
     out property <length> H1-font-size: 46px;
     out property <length> H2-font-size: 21px;
     out property <length> H3-font-size: 18px;
     out property <length> H4-font-size: 15px;
     out property <length> tile-title-font-size:  13pt;
-    out property <length> hvac-title-font-size:  13pt;
-}
-
-export global Animation {
-    out property <duration> full-screen-duration: 300ms;
-    out property <duration> transition-duration:  500ms;
 }
 
 export global Colors {

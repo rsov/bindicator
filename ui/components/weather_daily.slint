@@ -1,0 +1,61 @@
+import { WeatherDaily } from "../api.slint";
+import { StandardTableView } from "std-widgets.slint";
+
+component DayRow {
+    in property <[string]> texts;
+    in property <bool> is-header;
+
+    HorizontalLayout {
+        alignment: space-between;
+        for text[index] in texts: Text {
+            width: 50px;
+            text: text;
+            font-weight: is-header ? 800 : 400;
+            horizontal-alignment: index == 0 ? left : right;
+        }
+    }
+}
+
+export component WeatherDaily {
+    in property <[WeatherDaily]> daily;
+
+    // I feel like this should be a UI layer, backend just gives us a date object
+    function get-day(week_day: int) -> string {
+        if (week_day == 0) {
+            return "MON";
+        } else if (week_day == 1) {
+            return "TUE";
+        } else if (week_day == 2) {
+            return "WED";
+        } else if (week_day == 3) {
+            return "THU";
+        } else if (week_day == 4) {
+            return "FRI";
+        } else if (week_day == 5) {
+            return "SAT";
+        } else if (week_day == 6) {
+            return "SUN";
+        } else {
+            return "WAT";
+        }
+    }
+
+    VerticalLayout {
+        spacing: 5px;
+
+        DayRow {
+            texts: ["Day", "Rain", "MM", "Min", "Max"];
+            is-header: true;
+        }
+
+        for day[index] in daily: DayRow {
+            texts: [
+                index == 0 ? "Today" : get-day(day.week-day),
+                day.precipitation-probability-max + "%",
+                day.precipitation-sum,
+                day.temperature-min + "°C",
+                day.temperature-max + "°C",
+            ];
+        }
+    }
+}

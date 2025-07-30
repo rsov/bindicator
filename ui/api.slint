@@ -2,20 +2,43 @@ import { Date, Time } from "std-widgets.slint";
 
 export enum Pages { home, settings }
 
+export enum WeatherType {
+    sunny,
+    cloudy,
+    fog,
+    sprinkle,
+    snow,
+    rain-drop,
+    rain-mix,
+    snowflake-cold,
+    snow-wind,
+    rain,
+    snow-thunderstorm,
+    thunderstorm,
+    other,
+}
+
 export struct Coordinates  {
     longitude: float,
     latitude: float,
 }
 
 export struct WeatherDaily {
-    temperature_max: float,
-    temperature_min: float,
+    temperature_max: int,
+    temperature_min: int,
     date: Date,
-    precipitation_sum: float,
+    week_day: int,
+    precipitation_sum: int,
     precipitation_probability_max: int,
-    weather_code: int,
+    weather_type: WeatherType,
     sunrise: Time,
     sunset: Time,
+}
+
+export struct WeatherCurrent {
+    temperature: float,
+    precipitation: float,
+    weather_type: WeatherType,
 }
 
 export global Api {
@@ -24,7 +47,38 @@ export global Api {
     in-out property <bool> is-yellow-bin: true;
     in-out property <int> days-to-bin: 0;
 
-    in-out property <[WeatherDaily]> weather-daily;
+    in-out property <WeatherCurrent> weather-current;
+
+    in-out property <[WeatherDaily]> weather-daily: [
+        {
+            week-day: 1,
+            temperature_max: 25,
+            temperature_min: 0,
+            date: { year: 2025, month: 3, day: 18 },
+            precipitation_sum: 0.8,
+            precipitation_probability_max: 23,
+            weather_type: WeatherType.rain,
+            sunrise: { hour: 6, minute: 55, second: 0 },
+            sunset: { hour: 17, minute: 10, second: 0 },
+        },
+        {
+            week-day: 2,
+            temperature_max: 25,
+            temperature_min: 10,
+            date: { year: 2025, month: 3, day: 18 },
+            precipitation_sum: 0,
+            precipitation_probability_max: 0,
+            weather_type: WeatherType.rain,
+            sunrise: { hour: 6, minute: 55, second: 0 },
+            sunset: { hour: 17, minute: 10, second: 0 },
+        }
+    ];
+
+    in-out property <Time> weather-updated-at: {
+        hour: 15,
+        minute: 12,
+        second: 33,
+    };
 
     in-out property <Coordinates> coordinates: {
         latitude: 0,
