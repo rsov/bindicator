@@ -1,3 +1,12 @@
+import "../assets/Font Awesome 7 Free-Regular-400.otf";
+import "../assets/Font Awesome 7 Free-Solid-900.otf";
+import "../assets/OpenSans-Bold.ttf";
+import "../assets/OpenSans-Regular.ttf";
+
+export global AppFonts {
+    out property <string> default-font-name: "Open Sans";
+    out property <string> icon-font-name: "Font Awesome 7 Free";
+}
 
 export global Utils {
     public pure function add-number-prefix(number: int) -> string {

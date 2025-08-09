@@ -1,10 +1,11 @@
 import { Button } from "std-widgets.slint";
 import { Api, Pages } from "../api.slint";
-import { Utils } from "../common.slint";
+import { Utils, AppFonts} from "../common.slint";
 import { Bins } from "../components/bins.slint";
 import { Time } from "../components/time.slint";
 import { WeatherDaily } from "../components/weather_daily.slint";
 import { WeatherCurrent } from "../components/weather_current.slint";
+import { WeatherHourly } from "../components/weather_hourly.slint";
 
 export component HomePage {
     width: 100%;
@@ -12,7 +13,8 @@ export component HomePage {
 
     VerticalLayout {
         padding: 8px;
-        alignment: space-between;
+        spacing: 8px;
+        alignment: stretch;
 
         HorizontalLayout {
             alignment: LayoutAlignment.space-between;
@@ -29,12 +31,25 @@ export component HomePage {
         }
 
         HorizontalLayout {
+            vertical-stretch: 1;
+
             WeatherCurrent {
                 current: Api.weather-current;
             }
 
-            WeatherDaily {
-                daily: Api.weather-daily;
+            VerticalLayout {
+                horizontal-stretch: 1;
+                alignment: LayoutAlignment.stretch;
+                spacing: 8px;
+
+                WeatherHourly {
+                    hourly: Api.weather-hourly;
+                }
+
+                WeatherDaily {
+                    vertical-stretch: 2;
+                    daily: Api.weather-daily;
+                }
             }
         }
 
@@ -42,7 +57,6 @@ export component HomePage {
             alignment: space-between;
 
             Button {
-
                 text: "Settings";
                 clicked => {
                     Api.current-page = Pages.settings;

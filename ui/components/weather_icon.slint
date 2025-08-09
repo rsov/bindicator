@@ -1,5 +1,5 @@
 import { WeatherType } from "../api.slint";
-import "../Font Awesome 7 Free-Solid-900.otf";
+import { AppFonts } from "../common.slint";
 
 export component WeatherIcon inherits Text {
     in property <WeatherType> type;
@@ -8,8 +8,8 @@ export component WeatherIcon inherits Text {
 
 
     text: ""; // https://fontawesome.com/icons/circle-question?f=classic&s=solid
-font-weight: 900;
-    font-family: "Font Awesome 7 Free";
+    font-weight: 900;
+    font-family: AppFonts.icon-font-name;
 
     states [
         bind-text when type == WeatherType.sunny: {

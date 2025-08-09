@@ -35,6 +35,12 @@ export struct WeatherDaily {
     sunset: Time,
 }
 
+export struct WeatherHourly {
+    temperature: int,
+    precipitation_mm: float,
+    date: Date,
+    time: Time,
+}
 export struct WeatherCurrent {
     temperature: int,
     precipitation: int,
@@ -48,6 +54,51 @@ export global Api {
     in-out property <int> days-to-bin: 0;
 
     in-out property <WeatherCurrent> weather-current;
+
+    in-out property <[WeatherHourly]> weather-hourly: [
+        {
+            temperature: 10,
+            precipitation_mm: 0.2,
+            time: { hour: 16, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 13,
+            precipitation_mm: 0,
+            time: { hour: 17, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 13,
+            precipitation_mm: 0,
+            time: { hour: 18, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 14,
+            precipitation_mm: 0,
+            time: { hour: 19, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 11,
+            precipitation_mm: 0,
+            time: { hour: 20, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 12,
+            precipitation_mm: 0,
+            time: { hour: 21, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+        {
+            temperature: 10,
+            precipitation_mm: 0,
+            time: { hour: 22, minute: 0, second: 0 },
+            date: { year: 2025, month: 1, day: 1 }
+        },
+    ];
 
     in-out property <[WeatherDaily]> weather-daily: [
         {

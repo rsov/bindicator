@@ -1,12 +1,11 @@
-import "../Font Awesome 7 Free-Regular-400.otf";
-import { Palette, Style } from "../common.slint";
+import { Palette, Style, AppFonts } from "../common.slint";
 
 
 component Bin {
     in property <color> color;
     Text {
         font-size: 48px;
-        font-family: "Font Awesome 6 Free";
+        font-family: AppFonts.icon-font-name;
         color: color;
         text: @tr(""); // https://fontawesome.com/icons/trash-can?f=classic&s=regular
     }
@@ -18,7 +17,7 @@ export component Bins {
 
     HorizontalLayout {
         alignment: start;
-        spacing: 16px;
+        spacing: 24px;
 
         Bin {
             color: red;

@@ -1,12 +1,13 @@
 import { WeatherCurrent } from "../api.slint";
-import { Style } from "../common.slint";
+import { Style, AppFonts } from "../common.slint";
 import { WeatherIcon } from "./weather_icon.slint";
 
 export component WeatherCurrent {
     in property <WeatherCurrent> current;
 
     VerticalLayout {
-        alignment: start;
+        padding: 36px;
+        alignment: center;
         HorizontalLayout {
             alignment: center;
 

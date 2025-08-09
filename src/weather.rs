@@ -2,7 +2,9 @@ use chrono::{DateTime, Datelike, Local, Timelike};
 use serde::Deserialize;
 use slint::VecModel;
 
-use crate::{Api, Coordinates, Date, Time, WeatherCurrent, WeatherDaily, WeatherType};
+use crate::{
+    Api, Coordinates, Date, Time, WeatherCurrent, WeatherDaily, WeatherHourly, WeatherType,
+};
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Default)]
 pub struct WeatherApiDaily {
@@ -22,6 +24,7 @@ pub struct WeatherApiHourly {
     pub precipitation: Vec<f32>,
     pub time: Vec<String>,
     pub uv_index: Vec<f32>,
+    pub precipitation_probability: Vec<i32>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Default)]
@@ -50,7 +53,13 @@ async fn fetch_weather(coordinates: Coordinates) -> WeatherApiData {
         ],
         [
             "hourly",
-            &["temperature_2m", "precipitation", "uv_index"].join(","),
+            &[
+                "temperature_2m",
+                "precipitation",
+                "uv_index",
+                "precipitation_probability",
+            ]
+            .join(","),
         ],
         [
             "daily",
@@ -117,64 +126,85 @@ pub async fn set_weather(api: Api<'_>) {
     });
 
     let daily = api_data.daily.clone();
+    let hourly = api_data.hourly.clone();
 
     let mut weather_daily: Vec<WeatherDaily> = vec![];
 
-    api_data
-        .daily
-        .time
-        .iter()
-        .enumerate()
-        .for_each(|(i, time)| {
-            let api_date = DateTime::parse_from_rfc3339(&format!("{time}T00:00:00{offset_hours}"));
+    daily.time.iter().enumerate().for_each(|(i, time)| {
+        let api_date = DateTime::parse_from_rfc3339(&format!("{time}T00:00:00{offset_hours}"));
 
+        let mut date = Date::default();
+        let mut week_day: i32 = 0;
+        if let Ok(d) = api_date {
+            date.year = d.year() as i32;
+            date.month = d.month() as i32;
+            date.day = d.day() as i32;
+            week_day = d.weekday().num_days_from_monday() as i32;
+        }
+
+        let mut sunrise = Time::default();
+        let api_sunrise = DateTime::parse_from_rfc3339(&format!(
+            "{}:00{offset_hours}",
+            api_data.daily.sunrise[i]
+        ));
+        if let Ok(t) = api_sunrise {
+            sunrise.hour = t.hour() as i32;
+            sunrise.minute = t.minute() as i32;
+            sunrise.second = t.second() as i32;
+        }
+
+        let api_sunset =
+            DateTime::parse_from_rfc3339(&format!("{}:00{offset_hours}", api_data.daily.sunset[i]));
+
+        let mut sunset = Time::default();
+
+        if let Ok(t) = api_sunset {
+            sunset.hour = t.hour() as i32;
+            sunset.minute = t.minute() as i32;
+            sunset.second = t.second() as i32;
+        }
+
+        weather_daily.push(WeatherDaily {
+            weather_type: code_to_type(daily.weather_code[i]),
+            week_day: week_day,
+            temperature_max: daily.temperature_2m_max[i] as i32,
+            temperature_min: daily.temperature_2m_min[i] as i32,
+            precipitation_sum: daily.precipitation_sum[i] as i32,
+            precipitation_probability_max: daily.precipitation_probability_max[i],
+            date: date,
+            sunrise: sunrise,
+            sunset: sunset,
+        });
+    });
+
+    api.set_weather_daily(VecModel::from_slice(&weather_daily));
+
+    let mut weather_hourly: Vec<WeatherHourly> = vec![];
+    hourly.time.iter().enumerate().for_each(|(i, time)| {
+        // Time example: "2025-08-09T00:00"
+        let api_date = DateTime::parse_from_rfc3339(&format!("{time}:00{offset_hours}"));
+        let current_time = Local::now();
+
+        if api_date.is_ok() && api_date.unwrap() >= current_time {
             let mut date = Date::default();
-            let mut week_day: i32 = 0;
+            let mut time = Time::default();
             if let Ok(d) = api_date {
                 date.year = d.year() as i32;
                 date.month = d.month() as i32;
                 date.day = d.day() as i32;
-                week_day = d.weekday().num_days_from_monday() as i32;
+                time.hour = d.hour() as i32;
+                time.minute = d.minute() as i32;
             }
 
-            let mut sunrise = Time::default();
-            let api_sunrise = DateTime::parse_from_rfc3339(&format!(
-                "{}:00{offset_hours}",
-                api_data.daily.sunrise[i]
-            ));
-            if let Ok(t) = api_sunrise {
-                sunrise.hour = t.hour() as i32;
-                sunrise.minute = t.minute() as i32;
-                sunrise.second = t.second() as i32;
-            }
-
-            let api_sunset = DateTime::parse_from_rfc3339(&format!(
-                "{}:00{offset_hours}",
-                api_data.daily.sunset[i]
-            ));
-
-            let mut sunset = Time::default();
-
-            if let Ok(t) = api_sunset {
-                sunset.hour = t.hour() as i32;
-                sunset.minute = t.minute() as i32;
-                sunset.second = t.second() as i32;
-            }
-
-            weather_daily.push(WeatherDaily {
-                weather_type: code_to_type(daily.weather_code[i]),
-                week_day: week_day,
-                temperature_max: daily.temperature_2m_max[i] as i32,
-                temperature_min: daily.temperature_2m_min[i] as i32,
-                precipitation_sum: daily.precipitation_sum[i] as i32,
-                precipitation_probability_max: daily.precipitation_probability_max[i],
+            weather_hourly.push(WeatherHourly {
+                temperature: hourly.temperature_2m[i] as i32,
+                precipitation_mm: hourly.precipitation[i],
                 date: date,
-                sunrise: sunrise,
-                sunset: sunset,
+                time: time,
             });
-        });
-
-    api.set_weather_daily(VecModel::from_slice(&weather_daily));
+        }
+    });
+    api.set_weather_hourly(VecModel::from_slice(&weather_hourly));
 
     let now = Local::now();
     let mut time = Time::default();

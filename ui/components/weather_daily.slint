@@ -1,14 +1,17 @@
 import { WeatherDaily } from "../api.slint";
-import { StandardTableView } from "std-widgets.slint";
+import { Style , AppFonts} from "../common.slint";
+import { StandardTableView, ScrollView } from "std-widgets.slint";
 
 component DayRow {
     in property <[string]> texts;
     in property <bool> is-header;
 
     HorizontalLayout {
-        alignment: space-between;
+        // alignment: space-between;
+        alignment: space-around;
         for text[index] in texts: Text {
-            width: 50px;
+            font-size: Style.H2-font-size;
+            width: index == 0 ? 80px : 55px;
             text: text;
             font-weight: is-header ? 800 : 400;
             horizontal-alignment: index == 0 ? left : right;
@@ -40,22 +43,27 @@ export component WeatherDaily {
         }
     }
 
-    VerticalLayout {
-        spacing: 5px;
+    ScrollView {
+        VerticalLayout {
+            spacing: 4px;
+            alignment: start;
+
+        // Cant use Grid or StandardTableView because they can't be populated from loops
 
         DayRow {
-            texts: ["Day", "Rain", "MM", "Min", "Max"];
-            is-header: true;
-        }
+                texts: ["Day", "Rain", "MM", "Min", "Max"];
+                is-header: true;
+            }
 
-        for day[index] in daily: DayRow {
-            texts: [
-                index == 0 ? "Today" : get-day(day.week-day),
-                day.precipitation-probability-max + "%",
-                day.precipitation-sum,
-                day.temperature-min + "°C",
-                day.temperature-max + "°C",
-            ];
+            for day[index] in daily: DayRow {
+                texts: [
+                    index == 0 ? "TODAY" : get-day(day.week-day),
+                    day.precipitation-probability-max + "%",
+                    day.precipitation-sum,
+                    day.temperature-min + "°C",
+                    day.temperature-max + "°C",
+                ];
+            }
         }
     }
 }

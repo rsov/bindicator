@@ -1,0 +1,38 @@
+import { WeatherHourly } from "../api.slint";
+import { Style, AppFonts } from "../common.slint";
+import { StandardTableView, ScrollView } from "std-widgets.slint";
+
+
+export component WeatherHourly {
+    in property <[WeatherHourly]> hourly;
+
+    ScrollView {
+        HorizontalLayout {
+            spacing: 16px;
+
+            for hour[index] in hourly: VerticalLayout {
+                spacing: 8px;
+                alignment: start;
+                Text {
+                    text: hour.time.hour + ":00";
+                    font-size: Style.H3-font-size;
+                    font-weight: 800;
+                    horizontal-alignment: right;
+                }
+
+                Text {
+                    text: hour.temperature + "°C";
+                    font-size: Style.H2-font-size;
+                    horizontal-alignment: right;
+                    font-weight: 200;
+                }
+
+                if (hour.precipitation-mm != 0.0): Text {
+                    text: hour.precipitation-mm;
+                    font-size: Style.H2-font-size;
+                    horizontal-alignment: right;
+                }
+            }
+        }
+    }
+}
